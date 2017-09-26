@@ -3,6 +3,8 @@ package com.utn.mobile.myapplication;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -74,24 +76,50 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    public void setFragment(Fragment fragment){
+        setFragment(fragment, false, null);
+    }
+
+    public void setFragment(Fragment fragment, boolean toBackStack, String name ) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, fragment);
+        if(toBackStack) {
+            ft.addToBackStack(name);
+        }
+        ft.commit();
+    }
+
+    private Fragment getMainFragment() {
+        return getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Fragment selectedFragment = null;
+        boolean selected = true;
 
         if (id == R.id.nav_recomendations) {
-        
+            selectedFragment = new RecomendacionesFragment();
         } else if (id == R.id.nav_searcher) {
-
+            selectedFragment = new BuscadorFragment();
         } else if (id == R.id.nav_user_lists) {
-
+            selectedFragment = new ListasUsuarioFragment();
+        } else if (id == R.id.nav_user_fav_actors) {
+            selectedFragment = new ActoresFavoritosFragment();
         } else if (id == R.id.nav_movie_recognizer) {
-
+            selectedFragment = new ReconocedorFragment();
         } else if (id == R.id.nav_close_session) {
-
+            //closeSession()
+            selected = false;
+        }
+        else {
+            selected = false;
         }
 
+        if(selected) {
+            setFragment(selectedFragment);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
