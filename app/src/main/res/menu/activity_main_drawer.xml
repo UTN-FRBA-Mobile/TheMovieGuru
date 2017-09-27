@@ -8,7 +8,7 @@
             android:title="@string/recomendations" />
         <item
             android:id="@+id/nav_searcher"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@android:drawable/ic_menu_search"
             android:title="@string/searcher" />
         <item
             android:id="@+id/nav_user_lists"
@@ -16,11 +16,11 @@
             android:title="@string/user_lists" />
         <item
             android:id="@+id/nav_user_fav_actors"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@android:drawable/btn_star"
             android:title="@string/user_fav_actors" />
         <item
             android:id="@+id/nav_movie_recognizer"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_menu_camera"
             android:title="@string/movie_recognizer" />
         <item
             android:id="@+id/nav_close_session"

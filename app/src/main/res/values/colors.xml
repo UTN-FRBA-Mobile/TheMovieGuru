@@ -3,4 +3,10 @@
     <color name="colorPrimary">#111111</color>
     <color name="colorPrimaryDark">#222222</color>
     <color name="colorAccent">#FF0000</color>
+    <color name="toolbarIcon">#FFFFFF</color>
+    <color name="toolbarFont">#FFFFFF</color>
+    <color name="simpleBackgroundPress">#FFFFFF</color>
+    <color name="simpleBackground">#FFFFFF</color>
+    <color name="toolbarPrimary">#FC3030</color>
+    <color name="toolbarPrimaryDark">#cb0a1d</color>
 </resources>
