@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
         if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             View parentLayout = findViewById(android.R.id.content);
-            Toast.makeText(getApplicationContext(), "asdas", Toast.LENGTH_SHORT).show();
+            setFragment(new BuscadorFragment());
         }
     }
 
