@@ -115,7 +115,10 @@ public class BuscadorFragment extends Fragment {
         protected Integer doInBackground(Object... params) {
             try {
                 //List<SearchCondition> searchConditions = getActivity().getSearchConditions();
-                actors = ActorService.get().getAll("John");
+                MainActivity activity = (MainActivity) getActivity();
+                String query = activity.getQuery();
+
+                actors = ActorService.get().getAll(query);
                 return TASK_RESULT_OK;
             } catch (Exception ex) {
                 ex.printStackTrace();

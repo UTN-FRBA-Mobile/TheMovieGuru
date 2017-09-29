@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout mDrawerLayout;
     private List<Actor> mActors = new ArrayList<>();
+    private String mQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity
     public void onNewIntent(Intent intent){
         setIntent(intent);
         if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
+            mQuery = intent.getStringExtra(SearchManager.QUERY);
             View parentLayout = findViewById(android.R.id.content);
             setFragment(new BuscadorFragment());
         }
@@ -186,4 +187,6 @@ public class MainActivity extends AppCompatActivity
     public void setActors(List<Actor> actors) {
         this.mActors = actors;
     }
+    public void setQuery(String query) { this.mQuery = query; }
+    public String getQuery() { return mQuery; }
 }

@@ -35,7 +35,7 @@ public class ActorService extends AbstractService {
 
     public List<Actor> getAll(boolean authentication, String search) {
         String url = String.format(context.getString(R.string.url_actor), context.getString(R.string.base_url));
-        String key = context.getString(R.string.cache_key_actor);
+        String key = context.getString(R.string.cache_key_actor)+search;
         List<Actor> actors = new ArrayList<>();
         int page = 1;
         boolean remainingActors = true;
