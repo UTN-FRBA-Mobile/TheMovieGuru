@@ -15,6 +15,12 @@ public class Pelicula {
     protected Collection<Review> reviews =  new ArrayList<>();
     private Collection<ActorEnPelicula> cast =  new ArrayList<>();
 
+    public Pelicula(String nombre, int id){
+        this.nombre = nombre;
+        this.tagline = tagline;
+        this.id = id;
+
+    }
 
 	/* SETTERS & GETTERS*/
 

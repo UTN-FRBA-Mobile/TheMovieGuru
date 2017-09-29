@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.utn.mobile.myapplication.component.AsapTextView;
 import com.utn.mobile.myapplication.domain.Actor;
+import com.utn.mobile.myapplication.domain.Pelicula;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout mDrawerLayout;
     private List<Actor> mActors = new ArrayList<>();
+    private List<Pelicula> mMovies = new ArrayList<>();
     private String mQuery;
 
     @Override
@@ -184,9 +186,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void setActors(List<Actor> actors) {
-        this.mActors = actors;
-    }
+    public void setActors(List<Actor> actors) { this.mActors = actors; }
+    public void setMovies(List<Pelicula> movies) { this.mMovies = movies; }
     public void setQuery(String query) { this.mQuery = query; }
     public String getQuery() { return mQuery; }
 }

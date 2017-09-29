@@ -16,7 +16,9 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.utn.mobile.myapplication.domain.Actor;
+import com.utn.mobile.myapplication.domain.Pelicula;
 import com.utn.mobile.myapplication.service.ActorService;
+import com.utn.mobile.myapplication.service.PeliculaService;
 import com.utn.mobile.myapplication.utils.GlobalConstants;
 import com.utn.mobile.myapplication.utils.Keywords;
 
@@ -80,14 +82,22 @@ public class BuscadorFragment extends Fragment {
 
 
 
-    private void createRecyclerView(List<Actor> actors) {
-        RecyclerView recyclerView = (RecyclerView) mRootView.findViewById(R.id.actorRecyclerView);
+    private void createRecyclerView(List<Actor> actors, List<Pelicula> movies) {
+        RecyclerView recyclerViewActores = (RecyclerView) mRootView.findViewById(R.id.actorRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerViewActores.setLayoutManager(layoutManager);
+
+        RecyclerView recyclerViewPeliculas = (RecyclerView) mRootView.findViewById(R.id.peliculaRecyclerView);
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(getContext());
+        recyclerViewPeliculas.setLayoutManager(layoutManager2);
 
 
-        RVAdapter adapter = new RVAdapter(actors);
-        recyclerView.setAdapter(adapter);
+        ARVAdapter adapterActores = new ARVAdapter(actors);
+        recyclerViewActores.setAdapter(adapterActores);
+
+        MRVAdapter adapterPeliculas = new MRVAdapter(movies);
+        recyclerViewPeliculas.setAdapter(adapterPeliculas);
+
     }
 
     private void openActorDescription(Actor actor) {
@@ -110,6 +120,7 @@ public class BuscadorFragment extends Fragment {
 
     private class PopulateListTask extends AsyncTask<Object, Object, Integer> {
         List<Actor> actors;
+        List<Pelicula> movies;
 
         @Override
         protected Integer doInBackground(Object... params) {
@@ -117,8 +128,8 @@ public class BuscadorFragment extends Fragment {
                 //List<SearchCondition> searchConditions = getActivity().getSearchConditions();
                 MainActivity activity = (MainActivity) getActivity();
                 String query = activity.getQuery();
-
                 actors = ActorService.get().getAll(query);
+                movies = PeliculaService.get().getAll(query);
                 return TASK_RESULT_OK;
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -132,7 +143,7 @@ public class BuscadorFragment extends Fragment {
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
                 activity.setActors(actors);
-                createRecyclerView(actors);
+                createRecyclerView(actors, movies);
             }
         }
 
@@ -153,11 +164,26 @@ public class BuscadorFragment extends Fragment {
         }
     }
 
-    private class RVAdapter extends RecyclerView.Adapter<ActorViewHolder>{
+    private class PeliculaViewHolder extends RecyclerView.ViewHolder {
+
+        CardView itemContainer;
+        TextView itemName;
+        TextView itemContent;
+
+        public PeliculaViewHolder(View itemView) {
+            super(itemView);
+
+            itemContainer = (CardView) itemView.findViewById(R.id.itemContainer);
+            itemName = (TextView) itemView.findViewById(R.id.listItemName);
+            itemContent = (TextView) itemView.findViewById(R.id.listItemContent);
+        }
+    }
+
+    private class ARVAdapter extends RecyclerView.Adapter<ActorViewHolder>{
 
         List<Actor> actors;
 
-        public RVAdapter(List<Actor> actors) {
+        public ARVAdapter(List<Actor> actors) {
             //Nuevas instancias para evitar modificar listas originales referenciadas
             this.actors = new ArrayList(actors);
         }
@@ -176,13 +202,63 @@ public class BuscadorFragment extends Fragment {
         @Override
         public ActorViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.actor_item_layout, viewGroup, false);
-            ActorViewHolder pvh = new ActorViewHolder(v);
+            ActorViewHolder avh = new ActorViewHolder(v);
+            return avh;
+        }
+
+        @Override
+        public void onBindViewHolder(ActorViewHolder avh, int i) {
+            final Actor item = actors.get(i);
+
+            avh.itemName.setText(item.getNombre());
+            // pvh.itemContent.setText(item.getBiografia());
+
+            /*
+            pvh.itemContainer.setOnClickListener(new View.OnClickListener() {@Override
+                public void onClick(View v) {
+                    BuscadorFragment.this.openActorDescription(item);
+                }
+            });
+            */
+
+        }
+
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+        }
+    }
+
+    private class MRVAdapter extends RecyclerView.Adapter<PeliculaViewHolder>{
+
+        List<Pelicula> movies;
+
+        public MRVAdapter(List<Pelicula> movies) {
+            //Nuevas instancias para evitar modificar listas originales referenciadas
+            this.movies = new ArrayList(movies);
+        }
+
+        public void update(List<Pelicula> movies) {
+            this.movies.clear();
+            this.movies.addAll(movies);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemCount() {
+            return movies.size();
+        }
+
+        @Override
+        public PeliculaViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.peli_item_layout, viewGroup, false);
+            PeliculaViewHolder pvh = new PeliculaViewHolder(v);
             return pvh;
         }
 
         @Override
-        public void onBindViewHolder(ActorViewHolder pvh, int i) {
-            final Actor item = actors.get(i);
+        public void onBindViewHolder(PeliculaViewHolder pvh, int i) {
+            final Pelicula item = movies.get(i);
 
             pvh.itemName.setText(item.getNombre());
             // pvh.itemContent.setText(item.getBiografia());

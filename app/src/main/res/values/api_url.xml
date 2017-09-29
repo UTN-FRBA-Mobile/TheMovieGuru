@@ -2,4 +2,6 @@
 <resources>
     <string name="base_url">http://tp-tacs-1c2017-themovieguru.7e14.starter-us-west-2.openshiftapps.com/api/v1</string>
     <string name="url_actor">%1$s/buscador?type=actores</string>
+    <string name="url_pelicula">%1$s/buscador?type=peliculas</string>
+
 </resources>
