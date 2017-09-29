@@ -15,5 +15,6 @@
 
     <string name="reconocedor_help">Haga click aquí para abrir la cámara</string>
     <string name="escanear_text">Escanear</string>
+    <string name="cache_key_actor">actor_cache_key</string>
 
 </resources>

@@ -9,4 +9,5 @@
     <color name="simpleBackground">#FFFFFF</color>
     <color name="toolbarPrimary">#FC3030</color>
     <color name="toolbarPrimaryDark">#cb0a1d</color>
+    <color name="grayBackground">#DDDDDD</color>
 </resources>

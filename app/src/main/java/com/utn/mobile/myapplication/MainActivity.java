@@ -25,11 +25,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.utn.mobile.myapplication.component.AsapTextView;
+import com.utn.mobile.myapplication.domain.Actor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawerLayout;
+    private List<Actor> mActors = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,5 +181,9 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void setActors(List<Actor> actors) {
+        this.mActors = actors;
     }
 }

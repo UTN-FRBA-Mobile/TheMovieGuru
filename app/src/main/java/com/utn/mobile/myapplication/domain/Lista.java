@@ -1,4 +1,4 @@
-package com.utn.mobile.myapplication.Modelo;
+package com.utn.mobile.myapplication.domain;
 
 
 import java.util.ArrayList;
