@@ -1,9 +1,5 @@
 package com.utn.mobile.myapplication.service;
 
-import android.graphics.Point;
-
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.utn.mobile.myapplication.domain.Actor;
 
 import org.json.JSONArray;
@@ -11,11 +7,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import com.utn.mobile.myapplication.R;
+import com.utn.mobile.myapplication.domain.Imagen;
+import com.utn.mobile.myapplication.domain.Pelicula;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by lucho on 29/09/17.
@@ -34,7 +31,7 @@ public class ActorService extends AbstractService {
     }
 
     public List<Actor> getAll(boolean authentication, String search) {
-        String url = String.format(context.getString(R.string.url_actor), context.getString(R.string.base_url));
+        String url = String.format(context.getString(R.string.url_actores), context.getString(R.string.base_url));
         String key = context.getString(R.string.cache_key_actor)+search;
         List<Actor> actors = new ArrayList<>();
         int page = 1;
@@ -54,6 +51,7 @@ public class ActorService extends AbstractService {
         return getAll(false, search);
     }
 
+
     @Override
     protected List<Actor> deserialize(String json) {
         try {
@@ -71,5 +69,7 @@ public class ActorService extends AbstractService {
             return new ArrayList<>();
         }
     }
+
+
 }
 

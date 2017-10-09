@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.support.v4.app.FragmentTransaction;
+
 
 import com.utn.mobile.myapplication.domain.Actor;
 import com.utn.mobile.myapplication.domain.Pelicula;
@@ -162,6 +164,7 @@ public class BuscadorFragment extends Fragment {
             itemName = (TextView) itemView.findViewById(R.id.listItemName);
             itemContent = (TextView) itemView.findViewById(R.id.listItemContent);
         }
+
     }
 
     private class PeliculaViewHolder extends RecyclerView.ViewHolder {
@@ -211,6 +214,17 @@ public class BuscadorFragment extends Fragment {
             final Actor item = actors.get(i);
 
             avh.itemName.setText(item.getNombre());
+
+            avh.itemContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ActorFragment actorFragment = ActorFragment.newInstance(item.getId());
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, actorFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            });
             // pvh.itemContent.setText(item.getBiografia());
 
             /*
@@ -261,6 +275,17 @@ public class BuscadorFragment extends Fragment {
             final Pelicula item = movies.get(i);
 
             pvh.itemName.setText(item.getNombre());
+
+            pvh.itemContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PeliculaFragment peliculaFragment = new PeliculaFragment();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, peliculaFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            });
             // pvh.itemContent.setText(item.getBiografia());
 
             /*

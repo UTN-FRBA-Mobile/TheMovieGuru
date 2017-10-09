@@ -18,6 +18,10 @@ public class Actor {
         this.id = id;
 
     }
+
+    public Actor() {
+
+    }
 	/* SETTERS & GETTERS*/
 
     public int getId() {
@@ -39,5 +43,11 @@ public class Actor {
     public Collection<Pelicula> getPeliculas() {
         return peliculas;
     }
+
+    public void setId(int ID) { id = ID; }
+    public void setNombre(String name) { nombre = name; }
+    public void setBiografia(String bio) { biografia = bio; }
+    public void setImagenes(Collection<Imagen> images) { imagenes = images; }
+    public void setPeliculas(Collection<Pelicula> movies) { peliculas = movies; }
 
 }

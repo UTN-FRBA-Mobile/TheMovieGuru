@@ -25,7 +25,7 @@ public class PeliculaService extends AbstractService {
     }
 
     public List<Pelicula> getAll(boolean authentication, String search) {
-        String url = String.format(context.getString(R.string.url_pelicula), context.getString(R.string.base_url));
+        String url = String.format(context.getString(R.string.url_peliculas), context.getString(R.string.base_url));
         String key = context.getString(R.string.cache_key_pelicula)+search;
         List<Pelicula> movies = new ArrayList<>();
         int page = 1;

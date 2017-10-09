@@ -22,6 +22,10 @@ public class Pelicula {
 
     }
 
+    public Pelicula() {
+
+    }
+
 	/* SETTERS & GETTERS*/
 
 
@@ -58,4 +62,13 @@ public class Pelicula {
     {
         return cast;
     }
+
+    public void setId (int ID) { id = ID; }
+    public void setNombre (String name) { nombre = name; }
+    public void setTagline (String tag) { tagline = tag; }
+    public void setOverview (String ov) { overview = ov; }
+    public void setImg_poster (String path) { img_poster = path; }
+    public void setImg_backdrop (String path) { img_backdrop = path; }
+    public void setReviews (Collection<Review> revs) { reviews = revs; }
+    public void setCast (Collection<ActorEnPelicula> elenco) { cast = elenco; }
 }
