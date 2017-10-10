@@ -96,6 +96,9 @@ public class ActorFragment extends Fragment {
                 TextView nombre = (TextView) activity.findViewById(R.id.actor_name);
                 nombre.setText(actor.getNombre());
 
+                TextView bio = (TextView) activity.findViewById(R.id.actor_bio);
+                bio.setText(actor.getBiografia());
+
                 ScrollView scrollViewActor = (ScrollView) activity.findViewById(R.id.scrollActor);
                 scrollViewActor.setVisibility(View.VISIBLE);
             }

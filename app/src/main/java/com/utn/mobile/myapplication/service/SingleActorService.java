@@ -9,6 +9,7 @@ import com.utn.mobile.myapplication.domain.Pelicula;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.converter.StringHttpMessageConverter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +20,10 @@ public class SingleActorService extends AbstractService {
     private static final SingleActorService INSTANCE = new SingleActorService();
     public static SingleActorService get() {
         return INSTANCE;
+    }
+
+    private SingleActorService() {
+        restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
     }
 
     public Actor getOne(int id) { return getOne(false, id); }
@@ -53,14 +58,14 @@ public class SingleActorService extends AbstractService {
                 peli.setId(jsonPeli.getInt("id"));
                 peli.setNombre(jsonPeli.getString("original_title"));
                 peli.setImg_poster(jsonPeli.getString("poster_path"));
-                peli.setImg_backdrop(jsonPeli.getString("backdrop_path"));
-                peli.setOverview(jsonPeli.getString("overview"));
-                peli.setTagline(jsonPeli.getString("tagline"));
+                //peli.setImg_backdrop(jsonPeli.getString("backdrop_path"));
+                //peli.setOverview(jsonPeli.getString("overview"));
+                //peli.setTagline(jsonPeli.getString("tagline"));
                 pelis.add(peli);
             }
 
             for (int i = 0; i < imagesJsonArray.length(); i++) {
-                JSONObject jsonImg = moviesJsonArray.getJSONObject(i);
+                JSONObject jsonImg = imagesJsonArray.getJSONObject(i);
                 imagenes.add(new Imagen(jsonImg.getString("file_path")));
             }
 
