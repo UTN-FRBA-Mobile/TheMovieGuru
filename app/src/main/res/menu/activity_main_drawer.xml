@@ -27,6 +27,11 @@
             android:icon="@drawable/ic_menu_send"
             android:title="@string/close_session" />
 
+        <item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/login_text" />
+
     </group>
 
 </menu>

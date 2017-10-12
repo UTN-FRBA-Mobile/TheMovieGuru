@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.utn.mobile.myapplication.LoginFragment"
+    android:layout_margin="8dp">
+
+
+    <TextView
+        android:id="@+id/login_username_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/user_text" />
+
+    <EditText
+        android:id="@+id/login_username_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_username_textview"
+        android:hint="@string/user_hint_text"/>
+
+    <TextView
+        android:id="@+id/login_password_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/password_text"
+        android:layout_below="@+id/login_username_edittext"/>
+
+    <EditText
+        android:id="@+id/login_password_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_password_textview"
+        android:hint="@string/password_hint_text"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login_text"
+        android:layout_below="@+id/login_password_edittext"
+        />
+
+</RelativeLayout>

@@ -170,6 +170,8 @@ public class MainActivity extends AppCompatActivity
             selectedFragment = new ActoresFavoritosFragment();
         } else if (id == R.id.nav_movie_recognizer) {
             selectedFragment = new ReconocedorFragment();
+        } else if (id == R.id.nav_login) {
+            selectedFragment = new LoginFragment();
         } else if (id == R.id.nav_close_session) {
             //closeSession()
             selected = false;

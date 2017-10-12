@@ -21,5 +21,14 @@
     <string name="reconocedor_help">Haga click aquí para abrir la cámara</string>
     <string name="escanear_text">Escanear</string>
 
+    <string name="login_text">Iniciar Sesión</string>
+    <string name="user_text">Usuario </string>
+    <string name="password_text">Contraseña</string>
+    <string name="user_hint_text">Ingrese su usuario </string>
+    <string name="password_hint_text">Ingrese su contraseña</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>
