@@ -30,7 +30,7 @@ public class LoginFragment extends Fragment {
     String nombreDeUsuario;
     String contraseña;
     Usuario usuarioLoggeado;
-
+    Button iniciarSesion;
     public LoginFragment() {
 
     }
@@ -50,7 +50,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_login, container, false);
-        Button iniciarSesion = (Button) view.findViewById(R.id.login_button);
+        iniciarSesion = (Button) view.findViewById(R.id.login_button);
 
 
         iniciarSesion.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +82,7 @@ public class LoginFragment extends Fragment {
                     dialog.show();
                 }
                 new FindUsuario().execute();
-                Toast.makeText(getContext(), "ID usuario: " + usuarioLoggeado.getUserId(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getContext(), "ID usuario: " + usuarioLoggeado.getUserId(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -108,12 +108,14 @@ public class LoginFragment extends Fragment {
         @Override
         protected void onPostExecute(Integer result) {
             if (result == TASK_RESULT_OK) {
+                /*
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
-
+*/
                 // setearViews(actor, activity);
                 // createRecyclerView(actor.getPeliculas());
                 usuarioLoggeado = usuario;
+                iniciarSesion.setText(usuario.getUserId()); // si es exitoso, el texto del boton iniciar sesion deberia cambiar a ser el userID
             }
         }
 
