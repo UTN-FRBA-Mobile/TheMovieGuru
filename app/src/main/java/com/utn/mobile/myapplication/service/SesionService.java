@@ -35,9 +35,9 @@ public class SesionService extends AbstractService {
             // ??????????????
         }
 
-        u.setUsername(jsonObject.toString());
-        String response = this.postAuthenticated(url, jsonObject);
 
+        String response = this.postAuthenticated(url, jsonObject);
+        u = (Usuario) deserialize(response);
         return u;
     }
 
@@ -48,55 +48,13 @@ public class SesionService extends AbstractService {
             Usuario usuario = new Usuario();
             JSONObject jsonObject = new JSONObject(json);
             usuario.setUserId(jsonObject.getInt("userId"));
-
+            return usuario;
 
         }  catch (JSONException ex) {
             ex.printStackTrace();
             return new Usuario();
-    }
-
-        /*
-        try {
-            Actor actor = new Actor();
-
-            JSONObject jsonObject = new JSONObject(json);
-            actor.setNombre(jsonObject.getString("name"));
-            actor.setId(jsonObject.getInt("id"));
-            actor.setBiografia(jsonObject.getString("biography"));
-
-            Collection<Pelicula> pelis = new ArrayList<>();
-            Collection<Imagen> imagenes = new ArrayList<>();
-
-            JSONArray moviesJsonArray = jsonObject.getJSONArray("movie_credits");
-            JSONArray imagesJsonArray = jsonObject.getJSONArray("imagenes");
-
-            for (int i = 0; i < moviesJsonArray.length(); i++) {
-                JSONObject jsonPeli = moviesJsonArray.getJSONObject(i);
-                Pelicula peli = new Pelicula();
-                peli.setId(jsonPeli.getInt("id"));
-                peli.setNombre(jsonPeli.getString("original_title"));
-                peli.setImg_poster(jsonPeli.getString("poster_path"));
-                //peli.setImg_backdrop(jsonPeli.getString("backdrop_path"));
-                //peli.setOverview(jsonPeli.getString("overview"));
-                //peli.setTagline(jsonPeli.getString("tagline"));
-                pelis.add(peli);
-            }
-
-            for (int i = 0; i < imagesJsonArray.length(); i++) {
-                JSONObject jsonImg = imagesJsonArray.getJSONObject(i);
-                imagenes.add(new Imagen(jsonImg.getString("file_path")));
-            }
-
-            actor.setPeliculas(pelis);
-            actor.setImagenes(imagenes);
-
-            return actor;
-
-        } catch (JSONException ex) {
-            ex.printStackTrace();
-            return new Actor();
         }
-         */
-        return null;
+
+
     }
 }
