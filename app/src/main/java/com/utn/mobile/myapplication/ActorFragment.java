@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -147,12 +148,14 @@ public class ActorFragment extends Fragment {
 
         ImageView moviePoster;
         TextView movieName;
+        CardView movieContainer;
 
         public PeliViewHolder(View itemView) {
             super(itemView);
 
             moviePoster = (ImageView) itemView.findViewById(R.id.actor_movie_poster);
             movieName = (TextView) itemView.findViewById(R.id.actor_movie_title);
+            movieContainer = (CardView) itemView.findViewById(R.id.peliContainer);
         }
     }
 
@@ -190,7 +193,7 @@ public class ActorFragment extends Fragment {
             pvh.movieName.setText(item.getNombre());
             Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w342"+item.getImg_poster()).into(pvh.moviePoster);
 
-            pvh.moviePoster.setOnClickListener(new View.OnClickListener() {
+            pvh.movieContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int id = item.getId(); //usarlo para el get, hacer como el actor fragment
