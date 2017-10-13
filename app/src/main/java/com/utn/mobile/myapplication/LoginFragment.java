@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.utn.mobile.myapplication.domain.Usuario;
+import com.utn.mobile.myapplication.service.SesionService;
+
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
@@ -50,10 +53,9 @@ public class LoginFragment extends Fragment {
                     }
 
                     // mandar parametros a API
+                    Usuario u = SesionService.get().login(nombreDeUsuario,contraseña);
 
-                    // intepretar resultados
 
-                    //
 
                 }catch (Exception e){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

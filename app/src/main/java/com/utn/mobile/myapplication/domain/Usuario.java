@@ -14,15 +14,13 @@ public class Usuario {
     private String username;
     private String password;
 
-    private int listasCreadas;
-    private Collection<Actor> actores_favoritos;
-    private Collection<Lista> listas_peliculas;
+    private int listasCreadas = 0;
+    private Collection<Actor> actores_favoritos  = new ArrayList<>();;
+    private Collection<Lista> listas_peliculas = new ArrayList<>();
 
     public Usuario()
     {
-        this.actores_favoritos = new ArrayList<>();
-        this.listas_peliculas = new ArrayList<>();
-        this.listasCreadas = 0;
+
     }
 
     public int getUserId() {
