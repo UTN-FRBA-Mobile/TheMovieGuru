@@ -3,13 +3,14 @@ package com.utn.mobile.myapplication.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Actor {
 
     private int id;
     private String nombre;
     private String biografia;
-    private Collection<Imagen> imagenes = new ArrayList<>();
+    private List<Imagen> imagenes = new ArrayList<>();
     protected Collection<Pelicula> peliculas = new ArrayList<>();
 
     public Actor(String nombre, int id){
@@ -36,7 +37,7 @@ public class Actor {
         return biografia;
     }
 
-    public Collection<Imagen> getImagenes() {
+    public List<Imagen> getImagenes() {
         return imagenes;
     }
 
@@ -47,7 +48,7 @@ public class Actor {
     public void setId(int ID) { id = ID; }
     public void setNombre(String name) { nombre = name; }
     public void setBiografia(String bio) { biografia = bio; }
-    public void setImagenes(Collection<Imagen> images) { imagenes = images; }
+    public void setImagenes(List<Imagen> images) { imagenes = images; }
     public void setPeliculas(Collection<Pelicula> movies) { peliculas = movies; }
 
 }
