@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.utn.mobile.myapplication.LoginFragment"
+    android:layout_marginTop="?attr/actionBarSize"
     android:layout_margin="8dp">
 
 

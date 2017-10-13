@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.utn.mobile.myapplication.domain.Usuario;
 import com.utn.mobile.myapplication.service.SesionService;
@@ -19,20 +21,28 @@ import com.utn.mobile.myapplication.service.SesionService;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
+import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_ERROR;
+import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_OK;
+
 
 public class LoginFragment extends Fragment {
+
+    String nombreDeUsuario;
+    String contraseña;
+    Usuario usuarioLoggeado;
 
     public LoginFragment() {
 
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         /*
         if (getArguments() != null) {
-            //args
-        }
-        */
+            mId = getArguments().getInt(ARG_ID);
+            i = 1;
+        }*/
     }
 
     @Override
@@ -41,20 +51,23 @@ public class LoginFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_login, container, false);
         Button iniciarSesion = (Button) view.findViewById(R.id.login_button);
+
+
         iniciarSesion.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
                 try{
-                    String nombreDeUsuario = ((EditText) view.findViewById(R.id.login_username_edittext)).getText().toString();
-                    String contraseña = ((EditText) view.findViewById(R.id.login_password_edittext)).getText().toString();
+                    nombreDeUsuario = ((EditText) view.findViewById(R.id.login_username_edittext)).getText().toString();
+                    contraseña = ((EditText) view.findViewById(R.id.login_password_edittext)).getText().toString();
 
                     if (nombreDeUsuario.isEmpty() && contraseña.isEmpty()){
                        throw new Exception(getString(R.string.empty_strings));
                     }
 
                     // mandar parametros a API
-                    Usuario u = SesionService.get().login(nombreDeUsuario,contraseña);
 
+                    //SharedPreferences sharedPref = context.getSharedPreferences("session_data",Context.MODE_PRIVATE);
+                    //int idUser = sharedPref.getInt("user_id", 0);
 
 
                 }catch (Exception e){
@@ -68,13 +81,42 @@ public class LoginFragment extends Fragment {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
+                new FindUsuario().execute();
+                Toast.makeText(getContext(), "ID usuario: " + usuarioLoggeado.getUserId(), Toast.LENGTH_SHORT).show();
 
-                //SharedPreferences sharedPref = context.getSharedPreferences("session_data",Context.MODE_PRIVATE);
-                //int idUser = sharedPref.getInt("user_id", 0);
             }
         });
         return view;
     }
 
+
+    private class FindUsuario extends AsyncTask<Object, Object, Integer> {
+
+        Usuario usuario;
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+                usuario = SesionService.get().login(nombreDeUsuario,contraseña);
+                return TASK_RESULT_OK;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (result == TASK_RESULT_OK) {
+                MainActivity activity = (MainActivity) getActivity();
+                if (activity == null) return;
+
+                // setearViews(actor, activity);
+                // createRecyclerView(actor.getPeliculas());
+                usuarioLoggeado = usuario;
+            }
+        }
+
+    }
 
 }
