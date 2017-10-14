@@ -58,7 +58,7 @@ public abstract class AbstractService {
         long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(100);
         for (int i = 1; i <= MAX_ATTEMPTS; i++) {
             try {
-                response = post(endpoint, params, true);
+                response = post(endpoint, params, true, "application/x-www-form-urlencoded");
                 return response;
             } catch (IOException e) {
                 if (i == MAX_ATTEMPTS) {

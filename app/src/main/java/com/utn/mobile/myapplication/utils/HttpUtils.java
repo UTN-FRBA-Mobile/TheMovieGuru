@@ -25,20 +25,25 @@ public class HttpUtils {
 
     public static String post(String endpoint, JSONObject params)
             throws IOException {
-        return request(endpoint, params, "POST", false);
+        return request(endpoint, params, "POST", false, "application/json");
     }
 
     public static String post(String endpoint, JSONObject params, boolean authentication)
             throws IOException {
-        return request(endpoint, params, "POST", authentication);
+        return request(endpoint, params, "POST", authentication, "application/json");
+    }
+
+    public static String post(String endpoint, JSONObject params, boolean authentication, String contentType)
+            throws IOException {
+        return request(endpoint, params, "POST", authentication, contentType);
     }
 
     public static String put(String endpoint, JSONObject params, boolean authentication)
             throws IOException {
-        return request(endpoint, params, "PUT", authentication);
+        return request(endpoint, params, "PUT", authentication, "application/json");
     }
 
-    public static String request(String endpoint, JSONObject params, String method, boolean authentication)
+    public static String request(String endpoint, JSONObject params, String method, boolean authentication, String contentType)
             throws IOException {
 
         URL url;
@@ -55,8 +60,8 @@ public class HttpUtils {
             conn.setDoOutput(true);
             conn.setUseCaches(false);
             conn.setRequestMethod(method);
-            conn.setRequestProperty("Content-Type",
-                    "application/json");
+            conn.setRequestProperty("Content-Type", contentType);
+            conn.setRequestProperty("charset", "utf-8");
             conn.setRequestProperty("Content-length", Integer.toString(params.toString().length()));
             if(authentication){
                 Context context = MovieGuruApplication.getAppContext();
