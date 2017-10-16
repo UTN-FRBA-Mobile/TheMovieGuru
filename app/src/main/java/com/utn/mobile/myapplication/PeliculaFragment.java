@@ -126,12 +126,19 @@ public class PeliculaFragment extends Fragment {
         TextView actorCharacter;
         CardView actorContainer;
 
+        TextView actorName2;
+        TextView actorCharacter2;
+        CardView actorContainer2;
+
         public ActorViewHolder(View itemView) {
             super(itemView);
 
             actorName = (TextView) itemView.findViewById(R.id.movie_actor_name);
             actorCharacter = (TextView) itemView.findViewById(R.id.movie_actor_character);
             actorContainer = (CardView) itemView.findViewById(R.id.actorContainer);
+            actorName2 = (TextView) itemView.findViewById(R.id.movie_actor_name2);
+            actorCharacter2 = (TextView) itemView.findViewById(R.id.movie_actor_character2);
+            actorContainer2 = (CardView) itemView.findViewById(R.id.actorContainer2);
         }
     }
 
@@ -164,14 +171,14 @@ public class PeliculaFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ActorViewHolder avh, int i) {
-            final ActorEnPelicula item = actors.get(i);
+            final ActorEnPelicula item1 = actors.get(i);
 
-            avh.actorName.setText(item.getNombre());
-            avh.actorCharacter.setText(item.getCharacter());
+            avh.actorName.setText(item1.getNombre());
+            avh.actorCharacter.setText(item1.getCharacter());
             avh.actorContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int id = item.getId(); //usarlo para el get, hacer como el actor fragment
+                    int id = item1.getId(); //usarlo para el get, hacer como el actor fragment
                     ActorFragment peliculaFragment = ActorFragment.newInstance(id);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, peliculaFragment);
@@ -179,6 +186,22 @@ public class PeliculaFragment extends Fragment {
                     transaction.commit();
                 }
             });
+
+            final ActorEnPelicula item2 = actors.get(i+1);
+            avh.actorName2.setText(item2.getNombre());
+            avh.actorCharacter2.setText(item2.getCharacter());
+            avh.actorContainer2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int id = item2.getId(); //usarlo para el get, hacer como el actor fragment
+                    ActorFragment peliculaFragment = ActorFragment.newInstance(id);
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, peliculaFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                }
+            });
+
         }
 
         @Override
