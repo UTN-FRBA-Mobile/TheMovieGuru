@@ -197,7 +197,7 @@ public class ActorFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     int id = item.getId(); //usarlo para el get, hacer como el actor fragment
-                    PeliculaFragment peliculaFragment = new PeliculaFragment();
+                    PeliculaFragment peliculaFragment = PeliculaFragment.newInstance(id);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, peliculaFragment);
                     transaction.addToBackStack(null);

@@ -279,7 +279,7 @@ public class BuscadorFragment extends Fragment {
             pvh.itemContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PeliculaFragment peliculaFragment = new PeliculaFragment();
+                    PeliculaFragment peliculaFragment = PeliculaFragment.newInstance(item.getId());
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, peliculaFragment);
                     transaction.addToBackStack(null);
