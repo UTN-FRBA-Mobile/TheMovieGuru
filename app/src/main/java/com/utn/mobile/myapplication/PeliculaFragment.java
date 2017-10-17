@@ -116,6 +116,9 @@ public class PeliculaFragment extends Fragment {
         final ImageView imagenIV = (ImageView) activity.findViewById(R.id.movie_image);
         Picasso.with(this.getContext()).load("https://image.tmdb.org/t/p/w500"+peli.getImg_poster()).into(imagenIV);
 
+        ImageView backIV = (ImageView) activity.findViewById(R.id.back_image);
+        Picasso.with(this.getContext()).load("https://image.tmdb.org/t/p/w1280"+peli.getImg_backdrop()).into(backIV);
+
         ScrollView scrollViewPeli = (ScrollView) activity.findViewById(R.id.scrollMovie);
         scrollViewPeli.setVisibility(View.VISIBLE);
     }
