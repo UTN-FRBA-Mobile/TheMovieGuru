@@ -196,7 +196,7 @@ public class ActorFragment extends Fragment {
             pvh.movieContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int id = item.getId(); //usarlo para el get, hacer como el actor fragment
+                    int id = item.getId();
                     PeliculaFragment peliculaFragment = PeliculaFragment.newInstance(id);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container, peliculaFragment);

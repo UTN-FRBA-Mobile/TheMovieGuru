@@ -12,12 +12,15 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
                 <ImageView
                     android:id="@+id/actor_movie_poster"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:maxHeight="513px"
+                    android:adjustViewBounds="true"
                     android:paddingEnd="5dp"
                     android:paddingStart="5dp"
                     android:paddingTop="5dp"/>

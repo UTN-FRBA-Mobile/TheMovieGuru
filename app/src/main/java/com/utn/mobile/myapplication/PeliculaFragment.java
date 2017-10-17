@@ -159,7 +159,7 @@ public class PeliculaFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return actors.size();
+            return actors.size()/2;
         }
 
         @Override
@@ -171,37 +171,40 @@ public class PeliculaFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(ActorViewHolder avh, int i) {
-            final ActorEnPelicula item1 = actors.get(i);
 
-            avh.actorName.setText(item1.getNombre());
-            avh.actorCharacter.setText(item1.getCharacter());
-            avh.actorContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int id = item1.getId(); //usarlo para el get, hacer como el actor fragment
-                    ActorFragment peliculaFragment = ActorFragment.newInstance(id);
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment_container, peliculaFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
-            });
+                final ActorEnPelicula item1 = actors.get(i * 2);
 
-            final ActorEnPelicula item2 = actors.get(i+1);
-            avh.actorName2.setText(item2.getNombre());
-            avh.actorCharacter2.setText(item2.getCharacter());
-            avh.actorContainer2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int id = item2.getId(); //usarlo para el get, hacer como el actor fragment
-                    ActorFragment peliculaFragment = ActorFragment.newInstance(id);
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment_container, peliculaFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
-            });
+                avh.actorName.setText(item1.getNombre());
+                avh.actorCharacter.setText(item1.getCharacter());
+                avh.actorContainer.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int id = item1.getId();
+                        ActorFragment peliculaFragment = ActorFragment.newInstance(id);
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container, peliculaFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                });
 
+            if (i * 2 + 1 <= getItemCount()) {
+
+                final ActorEnPelicula item2 = actors.get(i * 2 + 1);
+                avh.actorName2.setText(item2.getNombre());
+                avh.actorCharacter2.setText(item2.getCharacter());
+                avh.actorContainer2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int id = item2.getId(); //usarlo para el get, hacer como el actor fragment
+                        ActorFragment peliculaFragment = ActorFragment.newInstance(id);
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container, peliculaFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                    }
+                });
+            }
         }
 
         @Override
