@@ -57,8 +57,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/texto_falopa"
-                    android:layout_toEndOf="@+id/biografia_actor_image"
-                    android:layout_alignTop="@+id/biografia_actor_image"
+                    android:layout_toEndOf="@+id/movie_image"
+                    android:layout_alignTop="@+id/movie_image"
                     android:paddingTop="10dp"
                     android:paddingEnd="10dp"
                     />

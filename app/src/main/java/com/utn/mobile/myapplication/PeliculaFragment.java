@@ -188,7 +188,7 @@ public class PeliculaFragment extends Fragment {
                     }
                 });
 
-            if (i * 2 + 1 <= getItemCount()) {
+            if (i * 2 + 1 <= actors.size()) {
 
                 final ActorEnPelicula item2 = actors.get(i * 2 + 1);
                 avh.actorName2.setText(item2.getNombre());

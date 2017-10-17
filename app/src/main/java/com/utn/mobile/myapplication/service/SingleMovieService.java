@@ -45,9 +45,9 @@ public class SingleMovieService extends AbstractService {
             peli.setId(jsonObject.getInt("id"));
             peli.setNombre(jsonObject.getString("original_title"));
             peli.setOverview(jsonObject.getString("overview"));
-            peli.setImg_poster("poster_path");
+            peli.setImg_poster(jsonObject.getString("poster_path"));
             peli.setTagline(jsonObject.getString("tagline"));
-            peli.setImg_backdrop("backdrop_path");
+            peli.setImg_backdrop(jsonObject.getString("backdrop_path"));
 
             Collection<ActorEnPelicula> cast = new ArrayList<>();
 
