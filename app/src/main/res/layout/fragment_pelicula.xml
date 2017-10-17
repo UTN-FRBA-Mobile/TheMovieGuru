@@ -2,6 +2,7 @@
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/scrollMovie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="?attr/actionBarSize"
@@ -9,6 +10,7 @@
         android:paddingRight="10dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:visibility="gone"
         tools:context="com.utn.mobile.myapplication.PeliculaFragment">
 
         <LinearLayout
@@ -21,6 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
+                android:textSize="20sp"
                 android:text="nombre de la peli" />
 
             <TextView
@@ -28,6 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="italic"
+                android:textSize="13sp"
                 android:text="tagline de la peli"/>
 
 
@@ -42,15 +46,21 @@
                     android:id="@+id/movie_image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
                     app:srcCompat="@mipmap/ic_launcher"
+                    android:paddingEnd="5dp"
+                    android:scaleX="0.9"
+                    android:scaleY="0.9"
                     />
                 <TextView
                     android:id="@+id/movie_plot"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/texto_falopa"
-                    android:layout_toRightOf="@+id/movie_image"
+                    android:layout_toEndOf="@+id/movie_image"
+                    android:layout_alignTop="@+id/movie_image"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="10dp"
                     />
             </RelativeLayout>
 
@@ -60,16 +70,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/actores"
+                android:textSize="16sp"
                 android:textStyle="bold"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/actorsRecyclerView"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content" />
             </LinearLayout>
 

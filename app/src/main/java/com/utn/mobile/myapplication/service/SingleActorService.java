@@ -13,6 +13,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class SingleActorService extends AbstractService {
 
@@ -47,7 +48,7 @@ public class SingleActorService extends AbstractService {
             actor.setBiografia(jsonObject.getString("biography"));
 
             Collection<Pelicula> pelis = new ArrayList<>();
-            Collection<Imagen> imagenes = new ArrayList<>();
+            List<Imagen> imagenes = new ArrayList<>();
 
             JSONArray moviesJsonArray = jsonObject.getJSONArray("movie_credits");
             JSONArray imagesJsonArray = jsonObject.getJSONArray("imagenes");

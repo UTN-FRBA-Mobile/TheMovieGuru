@@ -15,7 +15,7 @@
     <string name="agregar_a_favoritos_text">Agregar a favoritos</string>
     <string name="texto_falopa"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="peliculas">Películas</string>
-    <string name="actores">Actores</string>
+    <string name="actores">Elenco</string>
     <string name="cache_key_actor">actor_cache_key</string>
     <string name="cache_key_pelicula">pelicula_cache_key</string>
     <string name="reconocedor_help">Haga click aquí para abrir la cámara</string>

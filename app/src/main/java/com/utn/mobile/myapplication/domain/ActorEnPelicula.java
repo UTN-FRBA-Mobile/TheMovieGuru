@@ -18,4 +18,8 @@ public class ActorEnPelicula{
         return character;
     }
 
+    public void setId(int ID) { id = ID; }
+    public void setNombre(String name) { nombre = name; }
+    public void setCharacter(String personaje) { character = personaje; }
+
 }
