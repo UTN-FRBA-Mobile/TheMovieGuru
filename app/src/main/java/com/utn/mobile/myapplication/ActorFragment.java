@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -107,7 +108,7 @@ public class ActorFragment extends Fragment {
         TextView nombreTV = (TextView) activity.findViewById(R.id.actor_name);
         nombreTV.setText(actor.getNombre());
 
-        TextView bioTV = (TextView) activity.findViewById(R.id.actor_bio);
+        final TextView bioTV = (TextView) activity.findViewById(R.id.actor_bio);
         bioTV.setText(actor.getBiografia());
 
         final ImageView imagenIV = (ImageView) activity.findViewById(R.id.biografia_actor_image);
@@ -120,6 +121,28 @@ public class ActorFragment extends Fragment {
             public void onClick(View v) {
                 fetchNextImage(imagenIV, actor, i);
                 i ++;
+            }
+        });
+
+        final Button botonMas = (Button) activity.findViewById(R.id.button_bio);
+        final Button botonMenos = (Button) activity.findViewById(R.id.button_bio_less);
+
+
+        botonMas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bioTV.setMaxLines(1000);
+                botonMas.setVisibility(View.GONE);
+                botonMenos.setVisibility(View.VISIBLE);
+            }
+        });
+
+        botonMenos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bioTV.setMaxLines(16);
+                botonMas.setVisibility(View.VISIBLE);
+                botonMenos.setVisibility(View.GONE);
             }
         });
 

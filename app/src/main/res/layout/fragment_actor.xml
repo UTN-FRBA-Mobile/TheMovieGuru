@@ -61,12 +61,37 @@
                 android:id="@+id/actor_bio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxLines="16"
+                android:ellipsize="end"
                 android:text="@string/texto_falopa"
                 android:layout_toEndOf="@+id/biografia_actor_image"
                 android:layout_alignTop="@+id/biografia_actor_image"
                 android:paddingTop="10dp"
                 android:paddingEnd="10dp"
                 />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_bio"
+                android:layout_below="@+id/actor_bio"
+                android:layout_alignEnd="@+id/actor_bio"
+                android:paddingEnd="10dp"
+                android:text="@string/mostrar_mas"
+                android:background="@android:color/transparent"
+                android:textColor="@color/toolbarPrimary"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/button_bio_less"
+                android:layout_below="@+id/actor_bio"
+                android:layout_alignEnd="@+id/actor_bio"
+                android:visibility="gone"
+                android:paddingEnd="10dp"
+                android:text="@string/mostrar_menos"
+                android:background="@android:color/transparent"
+                android:textColor="@color/toolbarPrimary"/>
+
         </RelativeLayout>
 
 
