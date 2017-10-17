@@ -25,6 +25,7 @@ import com.utn.mobile.myapplication.interfaces.Closure;
 import com.utn.mobile.myapplication.utils.GlobalConstants;
 
 import static com.utn.mobile.myapplication.utils.HttpUtils.post;
+import static com.utn.mobile.myapplication.utils.HttpUtils.urlEncodedRequest;
 
 /**
  * Created by lucho on 29/09/17.
@@ -52,13 +53,36 @@ public abstract class AbstractService {
         return get(url, key, storeInMemory, false);
     }
 
+    protected String postUrlEncoded(String endpoint, String params){
+        String response = null;
+        Random random = new Random();
+        long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(100);
+        for (int i = 1; i <= MAX_ATTEMPTS; i++) {
+            try {
+                response = urlEncodedRequest(endpoint, params, "POST", false);
+                return response;
+            } catch (IOException e) {
+                if (i == MAX_ATTEMPTS) {
+                    break;
+                }
+                try {
+                    Thread.sleep(backoff);
+                } catch (InterruptedException e1) {
+                    Thread.currentThread().interrupt();
+                }
+                backoff *= 2;
+            }
+        }
+        return response;
+    }
+
     protected String postAuthenticated(String endpoint, JSONObject params){
         String response = null;
         Random random = new Random();
         long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(100);
         for (int i = 1; i <= MAX_ATTEMPTS; i++) {
             try {
-                response = post(endpoint, params, true, "application/x-www-form-urlencoded");
+                response = post(endpoint, params, true);
                 return response;
             } catch (IOException e) {
                 if (i == MAX_ATTEMPTS) {

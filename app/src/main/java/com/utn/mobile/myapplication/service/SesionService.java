@@ -2,11 +2,14 @@ package com.utn.mobile.myapplication.service;
 
 import com.utn.mobile.myapplication.R;
 import com.utn.mobile.myapplication.domain.Usuario;
+import com.utn.mobile.myapplication.utils.HttpUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
+import java.util.HashMap;
 
 
 public class SesionService extends AbstractService {
@@ -23,22 +26,21 @@ public class SesionService extends AbstractService {
 
     public Usuario login(String nombreDeUsuario, String contraseña){
         Usuario u = new Usuario();
+        //validemos algo pls
         String url = String.format(context.getString(R.string.url_login),
                                     context.getString(R.string.base_url));
-        JSONObject jsonObject = new JSONObject();
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("username", nombreDeUsuario);
+        params.put("password", contraseña);
         try {
-            jsonObject.put("username", nombreDeUsuario);
-            jsonObject.put("password", contraseña);
-
-
+            String urlParameters  = HttpUtils.getDataString(params);
+            String response = this.postUrlEncoded(url, urlParameters);
+            u = (Usuario) deserialize(response);
+            return u;
         } catch (Exception e){
-            // ??????????????
+            e.printStackTrace();
         }
-
-
-        String response = this.postAuthenticated(url, jsonObject);
-        u = (Usuario) deserialize(response);
-        return u;
+        return null;
     }
 
     @Override

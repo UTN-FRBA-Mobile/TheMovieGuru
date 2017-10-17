@@ -115,7 +115,7 @@ public class LoginFragment extends Fragment {
                 // setearViews(actor, activity);
                 // createRecyclerView(actor.getPeliculas());
                 usuarioLoggeado = usuario;
-                iniciarSesion.setText(usuario.getUserId()); // si es exitoso, el texto del boton iniciar sesion deberia cambiar a ser el userID
+                Toast.makeText(MovieGuruApplication.getAppContext(), "Hola user " + usuario.getUserId(), Toast.LENGTH_LONG).show();
             }
         }
 
