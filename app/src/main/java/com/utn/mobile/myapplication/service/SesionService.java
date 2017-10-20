@@ -1,5 +1,8 @@
 package com.utn.mobile.myapplication.service;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.utn.mobile.myapplication.R;
 import com.utn.mobile.myapplication.domain.Usuario;
 import com.utn.mobile.myapplication.utils.HttpUtils;
@@ -25,7 +28,7 @@ public class SesionService extends AbstractService {
     }
 
     public Usuario login(String nombreDeUsuario, String contraseña){
-        Usuario u = new Usuario();
+        Usuario u;
         //validemos algo pls
         String url = String.format(context.getString(R.string.url_login),
                                     context.getString(R.string.base_url));
@@ -36,6 +39,10 @@ public class SesionService extends AbstractService {
             String urlParameters  = HttpUtils.getDataString(params);
             String response = this.postUrlEncoded(url, urlParameters);
             u = (Usuario) deserialize(response);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            sharedPreferences.edit().putString("user-token", u.getToken()).apply();
+            sharedPreferences.edit().putInt("user-id", u.getUserId()).apply();
+
             return u;
         } catch (Exception e){
             e.printStackTrace();
@@ -50,6 +57,8 @@ public class SesionService extends AbstractService {
             Usuario usuario = new Usuario();
             JSONObject jsonObject = new JSONObject(json);
             usuario.setUserId(jsonObject.getInt("userId"));
+            usuario.setToken(jsonObject.getString("token"));
+            usuario.setUsername(jsonObject.getString("username"));
             return usuario;
 
         }  catch (JSONException ex) {
