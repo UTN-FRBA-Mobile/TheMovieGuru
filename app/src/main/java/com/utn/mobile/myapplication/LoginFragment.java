@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -115,7 +116,8 @@ public class LoginFragment extends Fragment {
                 // setearViews(actor, activity);
                 // createRecyclerView(actor.getPeliculas());
                 usuarioLoggeado = usuario;
-                Toast.makeText(MovieGuruApplication.getAppContext(), "Hola user " + usuario.getUserId(), Toast.LENGTH_LONG).show();
+                String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
+                Toast.makeText(MovieGuruApplication.getAppContext(), "El token guardado es " + token, Toast.LENGTH_LONG).show();
             }
         }
 
