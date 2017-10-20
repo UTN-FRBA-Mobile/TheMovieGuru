@@ -25,14 +25,15 @@ public class PeliculaService extends AbstractService {
     }
 
     public List<Pelicula> getAll(boolean authentication, String search) {
-        String url = String.format(context.getString(R.string.url_peliculas), context.getString(R.string.base_url));
+        String base_url = String.format(context.getString(R.string.api_pelicula), context.getString(R.string.base_api));
+        String api_key = "68325225ac8387f83699c5dddc932a8a";
         String key = context.getString(R.string.cache_key_pelicula)+search;
         List<Pelicula> movies = new ArrayList<>();
         int page = 1;
         boolean remainingMovies = true;
 
         while(remainingMovies) {
-            List<Pelicula> pagedMovies = (List<Pelicula>) get(url + "&page=" + page + "&busqueda=" + search, key + page, authentication);
+            List<Pelicula> pagedMovies = (List<Pelicula>) get(base_url + api_key + "&language=en-US&query=" + search + "&page=" + page, key + page, authentication);
             remainingMovies = false;
             movies.addAll(pagedMovies);
             page++;
@@ -49,11 +50,15 @@ public class PeliculaService extends AbstractService {
     protected List<Pelicula> deserialize(String json) {
         try {
             List<Pelicula> movies = new ArrayList<>();
-            JSONArray actorJsonArray = new JSONObject(json).getJSONArray("peliculas");
+            JSONArray actorJsonArray = new JSONObject(json).getJSONArray("results");
 
             for (int i = 0; i < actorJsonArray.length(); i++) {
                 JSONObject jsonObject = actorJsonArray.getJSONObject(i);
-                movies.add(new Pelicula(jsonObject.getString("nombre"), jsonObject.getInt("id")));
+                Pelicula peli = new Pelicula(jsonObject.getString("title"), jsonObject.getInt("id"));
+                peli.setImg_poster(jsonObject.getString("poster_path"));
+                peli.setYear(jsonObject.getString("release_date"));
+
+                movies.add(peli);
             }
             return movies;
 

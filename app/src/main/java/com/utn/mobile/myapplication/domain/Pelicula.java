@@ -8,6 +8,7 @@ public class Pelicula {
 
     private int id;
     private String nombre;
+    private String year;
     private String tagline;
     private String overview;
     private String img_poster;
@@ -63,6 +64,8 @@ public class Pelicula {
         return cast;
     }
 
+    public String getYear() { return year; }
+
     public void setId (int ID) { id = ID; }
     public void setNombre (String name) { nombre = name; }
     public void setTagline (String tag) { tagline = tag; }
@@ -71,4 +74,5 @@ public class Pelicula {
     public void setImg_backdrop (String path) { img_backdrop = path; }
     public void setReviews (Collection<Review> revs) { reviews = revs; }
     public void setCast (Collection<ActorEnPelicula> elenco) { cast = elenco; }
+    public void setYear (String anio) { year = anio; }
 }

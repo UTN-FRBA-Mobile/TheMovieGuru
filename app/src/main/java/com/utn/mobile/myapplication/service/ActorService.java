@@ -31,14 +31,15 @@ public class ActorService extends AbstractService {
     }
 
     public List<Actor> getAll(boolean authentication, String search) {
-        String url = String.format(context.getString(R.string.url_actores), context.getString(R.string.base_url));
+        String base_url = String.format(context.getString(R.string.api_actor), context.getString(R.string.base_api));
+        String api_key = "68325225ac8387f83699c5dddc932a8a";
         String key = context.getString(R.string.cache_key_actor)+search;
         List<Actor> actors = new ArrayList<>();
         int page = 1;
         boolean remainingActors = true;
 
         while(remainingActors) {
-            List<Actor> pagedActors = (List<Actor>) get(url + "&page=" + page + "&busqueda=" + search, key + page, authentication);
+            List<Actor> pagedActors = (List<Actor>) get(base_url + api_key + "&language=en-US&query=" + search+ "&page=" + page, key + page, authentication);
             remainingActors = false;
             actors.addAll(pagedActors);
             page++;
@@ -56,11 +57,30 @@ public class ActorService extends AbstractService {
     protected List<Actor> deserialize(String json) {
         try {
             List<Actor> actors = new ArrayList<>();
-            JSONArray actorJsonArray = new JSONObject(json).getJSONArray("actores");
+            JSONArray actorJsonArray = new JSONObject(json).getJSONArray("results");
 
             for (int i = 0; i < actorJsonArray.length(); i++) {
                 JSONObject jsonObject = actorJsonArray.getJSONObject(i);
-                actors.add(new Actor(jsonObject.getString("nombre"), jsonObject.getInt("id")));
+
+                Actor actor = new Actor(jsonObject.getString("name"), jsonObject.getInt("id"));
+
+                Imagen imagen = new Imagen(jsonObject.getString("profile_path"));
+                actor.addImagen(imagen);
+
+                Collection<Pelicula> pelis = new ArrayList<>();
+                JSONArray moviesJsonArray = jsonObject.getJSONArray("known_for");
+                for (int j = 0; j < moviesJsonArray.length(); j++) {
+                    JSONObject jsonPeli = moviesJsonArray.getJSONObject(j);
+                    Pelicula peli = new Pelicula();
+                    peli.setId(jsonPeli.getInt("id"));
+                   // peli.setNombre(jsonPeli.getString("original_title"));
+                    peli.setImg_poster(jsonPeli.getString("poster_path"));
+                    pelis.add(peli);
+                }
+
+                actor.setPeliculas(pelis);
+
+                actors.add(actor);
             }
             return actors;
 

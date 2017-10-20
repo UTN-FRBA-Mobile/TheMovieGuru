@@ -51,4 +51,6 @@ public class Actor {
     public void setImagenes(List<Imagen> images) { imagenes = images; }
     public void setPeliculas(Collection<Pelicula> movies) { peliculas = movies; }
 
+    public void addImagen(Imagen imagen) { imagenes.add(imagen); }
+
 }
