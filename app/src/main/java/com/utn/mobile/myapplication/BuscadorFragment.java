@@ -236,13 +236,13 @@ public class BuscadorFragment extends Fragment {
 
             String imagen = item.getImagenes().get(0).getUrl();
 
-            if (imagen != null && !imagen.isEmpty())
+            if (imagen.equals("null"))
             {
-                Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w154"+imagen).into(avh.itemImage);
+                Picasso.with(getContext()).load(R.drawable.batman).into(avh.itemImage);
             }
             else
             {
-                Picasso.with(getContext()).load(R.drawable.batman).into(avh.itemImage);
+                Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w300"+imagen).into(avh.itemImage);
             }
 
             // pvh.itemContent.setText(item.getBiografia());
