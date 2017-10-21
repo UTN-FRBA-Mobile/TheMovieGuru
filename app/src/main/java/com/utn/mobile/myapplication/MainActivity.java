@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,6 +33,9 @@ import com.utn.mobile.myapplication.service.GenreService;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_ERROR;
+import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_OK;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -64,6 +68,8 @@ public class MainActivity extends AppCompatActivity
                 this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        new FindGenres().execute();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -189,6 +195,21 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private class FindGenres extends AsyncTask<Object, Object, Integer> {
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+                //List<SearchCondition> searchConditions = getActivity().getSearchConditions();
+                mGeneros = GenreService.get().getAll();
+                return TASK_RESULT_OK;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
     }
 
 

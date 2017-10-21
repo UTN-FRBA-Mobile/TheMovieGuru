@@ -129,7 +129,6 @@ public class BuscadorFragment extends Fragment {
     private class PopulateListTask extends AsyncTask<Object, Object, Integer> {
         List<Actor> actors;
         List<Pelicula> movies;
-        List<Genero> genres;
 
         @Override
         protected Integer doInBackground(Object... params) {
@@ -137,8 +136,6 @@ public class BuscadorFragment extends Fragment {
                 //List<SearchCondition> searchConditions = getActivity().getSearchConditions();
                 MainActivity activity = (MainActivity) getActivity();
                 String query = activity.getQuery();
-                genres = GenreService.get().getAll();
-                activity.setGenres(genres);
                 actors = ActorService.get().getAll(query);
                 movies = PeliculaService.get().getAll(query);
                 return TASK_RESULT_OK;
@@ -153,7 +150,6 @@ public class BuscadorFragment extends Fragment {
             if (result == TASK_RESULT_OK) {
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
-                activity.setGenres(genres);
                 activity.setActors(actors);
                 activity.setMovies(movies);
                 createRecyclerView(actors, movies);
@@ -271,11 +267,12 @@ public class BuscadorFragment extends Fragment {
             String ret = "";
             List<Pelicula> pelis = actor.getPeliculas();
 
-            ret = ret + pelis.get(0).getNombre();
+            if(pelis.size() != 0) {
+                ret = ret + pelis.get(0).getNombre();
 
-            for(int i=1; i<pelis.size(); i++)
-            {
-                ret= ret+", "+pelis.get(i).getNombre();
+                for (int i = 1; i < pelis.size(); i++) {
+                    ret = ret + ", " + pelis.get(i).getNombre();
+                }
             }
 
             return ret;
