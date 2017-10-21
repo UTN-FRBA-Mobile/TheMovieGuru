@@ -21,8 +21,10 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.squareup.picasso.Picasso;
 import com.utn.mobile.myapplication.domain.Actor;
+import com.utn.mobile.myapplication.domain.Genero;
 import com.utn.mobile.myapplication.domain.Pelicula;
 import com.utn.mobile.myapplication.service.ActorService;
+import com.utn.mobile.myapplication.service.GenreService;
 import com.utn.mobile.myapplication.service.PeliculaService;
 import com.utn.mobile.myapplication.utils.GlobalConstants;
 import com.utn.mobile.myapplication.utils.Keywords;
@@ -127,6 +129,7 @@ public class BuscadorFragment extends Fragment {
     private class PopulateListTask extends AsyncTask<Object, Object, Integer> {
         List<Actor> actors;
         List<Pelicula> movies;
+        List<Genero> genres;
 
         @Override
         protected Integer doInBackground(Object... params) {
@@ -134,6 +137,8 @@ public class BuscadorFragment extends Fragment {
                 //List<SearchCondition> searchConditions = getActivity().getSearchConditions();
                 MainActivity activity = (MainActivity) getActivity();
                 String query = activity.getQuery();
+                genres = GenreService.get().getAll();
+                activity.setGenres(genres);
                 actors = ActorService.get().getAll(query);
                 movies = PeliculaService.get().getAll(query);
                 return TASK_RESULT_OK;
@@ -148,7 +153,9 @@ public class BuscadorFragment extends Fragment {
             if (result == TASK_RESULT_OK) {
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
+                activity.setGenres(genres);
                 activity.setActors(actors);
+                activity.setMovies(movies);
                 createRecyclerView(actors, movies);
             }
         }
@@ -176,6 +183,7 @@ public class BuscadorFragment extends Fragment {
     private class PeliculaViewHolder extends RecyclerView.ViewHolder {
 
         CardView itemContainer;
+        ImageView itemImage;
         TextView itemName;
         TextView itemContent;
 
@@ -185,6 +193,7 @@ public class BuscadorFragment extends Fragment {
             itemContainer = (CardView) itemView.findViewById(R.id.itemContainer);
             itemName = (TextView) itemView.findViewById(R.id.listItemName);
             itemContent = (TextView) itemView.findViewById(R.id.listItemContent);
+            itemImage = (ImageView) itemView.findViewById(R.id.listItemImage);
         }
     }
 
@@ -309,7 +318,15 @@ public class BuscadorFragment extends Fragment {
         public void onBindViewHolder(PeliculaViewHolder pvh, int i) {
             final Pelicula item = movies.get(i);
 
-            pvh.itemName.setText(item.getNombre());
+            if(item.getYear().equals(""))
+            {
+                pvh.itemName.setText(item.getNombre());
+            }
+            else
+            {
+                String year = item.getYear().substring(0,4);
+                pvh.itemName.setText(item.getNombre()+" ("+year+")");
+            }
 
             pvh.itemContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -321,6 +338,20 @@ public class BuscadorFragment extends Fragment {
                     transaction.commit();
                 }
             });
+
+            pvh.itemContent.setText(getGenres(item));
+
+            String imagen = item.getImg_poster();
+
+            if (imagen.equals("null"))
+            {
+                Picasso.with(getContext()).load(R.drawable.batman).into(pvh.itemImage);
+            }
+            else
+            {
+                Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w300"+imagen).into(pvh.itemImage);
+            }
+
             // pvh.itemContent.setText(item.getBiografia());
 
             /*
@@ -331,6 +362,23 @@ public class BuscadorFragment extends Fragment {
             });
             */
 
+        }
+
+        public String getGenres (Pelicula peli)
+        {
+            String ret = "";
+            List<Genero> generos = peli.getGeneros();
+
+            if(generos.size() != 0)
+            {
+                ret = ret + generos.get(0).getNombre();
+
+                for(int i=1; i<generos.size(); i++)
+                {
+                    ret= ret+", "+generos.get(i).getNombre();
+                }
+            }
+            return ret;
         }
 
         @Override

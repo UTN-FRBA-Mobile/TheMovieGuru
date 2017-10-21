@@ -3,6 +3,7 @@ package com.utn.mobile.myapplication.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Pelicula {
 
@@ -15,6 +16,7 @@ public class Pelicula {
     private String img_backdrop;
     protected Collection<Review> reviews =  new ArrayList<>();
     private Collection<ActorEnPelicula> cast =  new ArrayList<>();
+    private List<Genero> generos = new ArrayList<>();
 
     public Pelicula(String nombre, int id){
         this.nombre = nombre;
@@ -66,6 +68,8 @@ public class Pelicula {
 
     public String getYear() { return year; }
 
+    public List<Genero> getGeneros() { return generos; }
+
     public void setId (int ID) { id = ID; }
     public void setNombre (String name) { nombre = name; }
     public void setTagline (String tag) { tagline = tag; }
@@ -75,4 +79,5 @@ public class Pelicula {
     public void setReviews (Collection<Review> revs) { reviews = revs; }
     public void setCast (Collection<ActorEnPelicula> elenco) { cast = elenco; }
     public void setYear (String anio) { year = anio; }
+    public void setGeneros (List<Genero> genres) { generos = genres; }
 }

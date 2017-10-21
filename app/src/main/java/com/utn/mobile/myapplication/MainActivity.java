@@ -26,7 +26,9 @@ import android.widget.Toast;
 
 import com.utn.mobile.myapplication.component.AsapTextView;
 import com.utn.mobile.myapplication.domain.Actor;
+import com.utn.mobile.myapplication.domain.Genero;
 import com.utn.mobile.myapplication.domain.Pelicula;
+import com.utn.mobile.myapplication.service.GenreService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity
     private List<Actor> mActors = new ArrayList<>();
     private List<Pelicula> mMovies = new ArrayList<>();
     private String mQuery;
+    private static List<Genero> mGeneros = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,8 +191,23 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
+    public static String getGenreById(int id)
+    {
+        for(int i=0; i<mGeneros.size();i++)
+        {
+            Genero genre = mGeneros.get(i);
+            if (genre.getId() == id)
+            {
+                return genre.getNombre();
+            }
+        }
+        return "";
+    }
+
     public void setActors(List<Actor> actors) { this.mActors = actors; }
     public void setMovies(List<Pelicula> movies) { this.mMovies = movies; }
+    public void setGenres(List<Genero> genres) { this.mGeneros = genres; }
     public void setQuery(String query) { this.mQuery = query; }
     public String getQuery() { return mQuery; }
 }

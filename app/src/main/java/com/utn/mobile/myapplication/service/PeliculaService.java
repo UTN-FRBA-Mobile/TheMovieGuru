@@ -1,7 +1,10 @@
 package com.utn.mobile.myapplication.service;
 
 
+import com.google.gson.stream.JsonToken;
+import com.utn.mobile.myapplication.MainActivity;
 import com.utn.mobile.myapplication.R;
+import com.utn.mobile.myapplication.domain.Genero;
 import com.utn.mobile.myapplication.domain.Pelicula;
 
 import org.json.JSONArray;
@@ -58,6 +61,9 @@ public class PeliculaService extends AbstractService {
                 peli.setImg_poster(jsonObject.getString("poster_path"));
                 peli.setYear(jsonObject.getString("release_date"));
 
+                JSONArray genreJsonArray = jsonObject.getJSONArray("genre_ids");
+                peli.setGeneros(getMatchingGenres(genreJsonArray));
+
                 movies.add(peli);
             }
             return movies;
@@ -66,5 +72,20 @@ public class PeliculaService extends AbstractService {
             ex.printStackTrace();
             return new ArrayList<>();
         }
+    }
+
+    private List<Genero> getMatchingGenres(JSONArray jsonArray) {
+        List<Genero> genres = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            int id = jsonArray.optInt(i);
+
+            String nombre = MainActivity.getGenreById(id);
+
+            Genero genre = new Genero(id, nombre);
+
+            genres.add(genre);
+        }
+        return genres;
     }
 }
