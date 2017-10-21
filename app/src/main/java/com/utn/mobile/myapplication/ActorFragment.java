@@ -127,6 +127,16 @@ public class ActorFragment extends Fragment {
         final Button botonMas = (Button) activity.findViewById(R.id.button_bio);
         final Button botonMenos = (Button) activity.findViewById(R.id.button_bio_less);
 
+        bioTV.post(new Runnable() {
+            @Override
+            public void run() {
+                int lineCount = bioTV.getLineCount();
+                if(lineCount<16)
+                {
+                    botonMas.setVisibility(View.GONE);
+                }
+            }
+        });
 
         botonMas.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,14 +166,19 @@ public class ActorFragment extends Fragment {
         List<Imagen> imagenes = actor.getImagenes();
         int cant_imagenes = imagenes.size();
 
-        if(i>=cant_imagenes)
+        if(cant_imagenes==0)
         {
-            fetchNextImage(imagenIV, actor, (i-cant_imagenes));
+            Picasso.with(this.getContext()).load(R.drawable.batman).into(imagenIV);
         }
+
         else
         {
-            String url_imagen = imagenes.get(i).getUrl();
-            Picasso.with(this.getContext()).load("https://image.tmdb.org/t/p/w500"+url_imagen).into(imagenIV);
+            if (i >= cant_imagenes) {
+                fetchNextImage(imagenIV, actor, (i - cant_imagenes));
+            } else {
+                String url_imagen = imagenes.get(i).getUrl();
+                Picasso.with(this.getContext()).load("https://image.tmdb.org/t/p/w500" + url_imagen).into(imagenIV);
+            }
         }
     }
 

@@ -47,7 +47,7 @@ public class SingleActorService extends AbstractService {
             actor.setId(jsonObject.getInt("id"));
             actor.setBiografia(jsonObject.getString("biography"));
 
-            Collection<Pelicula> pelis = new ArrayList<>();
+            List<Pelicula> pelis = new ArrayList<>();
             List<Imagen> imagenes = new ArrayList<>();
 
             JSONArray moviesJsonArray = jsonObject.getJSONArray("movie_credits");

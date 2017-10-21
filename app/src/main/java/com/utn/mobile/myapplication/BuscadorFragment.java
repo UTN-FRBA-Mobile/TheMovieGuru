@@ -2,6 +2,7 @@ package com.utn.mobile.myapplication;
 
 import android.content.Intent;
 import android.graphics.Point;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,12 +12,14 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.support.v4.app.FragmentTransaction;
 
 
+import com.squareup.picasso.Picasso;
 import com.utn.mobile.myapplication.domain.Actor;
 import com.utn.mobile.myapplication.domain.Pelicula;
 import com.utn.mobile.myapplication.service.ActorService;
@@ -25,6 +28,7 @@ import com.utn.mobile.myapplication.utils.GlobalConstants;
 import com.utn.mobile.myapplication.utils.Keywords;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -154,6 +158,7 @@ public class BuscadorFragment extends Fragment {
     private class ActorViewHolder extends RecyclerView.ViewHolder {
 
         CardView itemContainer;
+        ImageView itemImage;
         TextView itemName;
         TextView itemContent;
 
@@ -163,6 +168,7 @@ public class BuscadorFragment extends Fragment {
             itemContainer = (CardView) itemView.findViewById(R.id.itemContainer);
             itemName = (TextView) itemView.findViewById(R.id.listItemName);
             itemContent = (TextView) itemView.findViewById(R.id.listItemContent);
+            itemImage = (ImageView) itemView.findViewById(R.id.listItemImage);
         }
 
     }
@@ -225,6 +231,20 @@ public class BuscadorFragment extends Fragment {
                     transaction.commit();
                 }
             });
+
+            avh.itemContent.setText(getMovies(item));
+
+            String imagen = item.getImagenes().get(0).getUrl();
+
+            if (imagen != null && !imagen.isEmpty())
+            {
+                Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w154"+imagen).into(avh.itemImage);
+            }
+            else
+            {
+                Picasso.with(getContext()).load(R.drawable.batman).into(avh.itemImage);
+            }
+
             // pvh.itemContent.setText(item.getBiografia());
 
             /*
@@ -235,6 +255,21 @@ public class BuscadorFragment extends Fragment {
             });
             */
 
+        }
+
+        public String getMovies (Actor actor)
+        {
+            String ret = "";
+            List<Pelicula> pelis = actor.getPeliculas();
+
+            ret = ret + pelis.get(0).getNombre();
+
+            for(int i=1; i<pelis.size(); i++)
+            {
+                ret= ret+", "+pelis.get(i).getNombre();
+            }
+
+            return ret;
         }
 
         @Override

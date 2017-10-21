@@ -11,7 +11,7 @@ public class Actor {
     private String nombre;
     private String biografia;
     private List<Imagen> imagenes = new ArrayList<>();
-    protected Collection<Pelicula> peliculas = new ArrayList<>();
+    protected List<Pelicula> peliculas = new ArrayList<>();
 
     public Actor(String nombre, int id){
         this.nombre = nombre;
@@ -41,7 +41,7 @@ public class Actor {
         return imagenes;
     }
 
-    public Collection<Pelicula> getPeliculas() {
+    public List<Pelicula> getPeliculas() {
         return peliculas;
     }
 
@@ -49,7 +49,7 @@ public class Actor {
     public void setNombre(String name) { nombre = name; }
     public void setBiografia(String bio) { biografia = bio; }
     public void setImagenes(List<Imagen> images) { imagenes = images; }
-    public void setPeliculas(Collection<Pelicula> movies) { peliculas = movies; }
+    public void setPeliculas(List<Pelicula> movies) { peliculas = movies; }
 
     public void addImagen(Imagen imagen) { imagenes.add(imagen); }
 

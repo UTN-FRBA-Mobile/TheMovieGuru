@@ -67,15 +67,17 @@ public class ActorService extends AbstractService {
                 Imagen imagen = new Imagen(jsonObject.getString("profile_path"));
                 actor.addImagen(imagen);
 
-                Collection<Pelicula> pelis = new ArrayList<>();
+                List<Pelicula> pelis = new ArrayList<>();
                 JSONArray moviesJsonArray = jsonObject.getJSONArray("known_for");
                 for (int j = 0; j < moviesJsonArray.length(); j++) {
                     JSONObject jsonPeli = moviesJsonArray.getJSONObject(j);
-                    Pelicula peli = new Pelicula();
-                    peli.setId(jsonPeli.getInt("id"));
-                   // peli.setNombre(jsonPeli.getString("original_title"));
-                    peli.setImg_poster(jsonPeli.getString("poster_path"));
-                    pelis.add(peli);
+
+                    if(jsonPeli.getString("media_type").equals("movie"))
+                    {
+                        Pelicula peli = new Pelicula();
+                        peli.setNombre(jsonPeli.getString("title"));
+                        pelis.add(peli);
+                    }
                 }
 
                 actor.setPeliculas(pelis);
