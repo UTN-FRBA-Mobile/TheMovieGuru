@@ -82,9 +82,16 @@ public class ActorFragment extends Fragment {
         Actor actor;
 
         @Override
+        protected void onPreExecute() {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.showLoading();
+        }
+
+        @Override
         protected Integer doInBackground(Object... params) {
             try {
                 actor = SingleActorService.get().getOne(mId);
+                MainActivity activity = (MainActivity) getActivity();
                 return TASK_RESULT_OK;
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -97,7 +104,7 @@ public class ActorFragment extends Fragment {
             if (result == TASK_RESULT_OK) {
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
-
+                activity.hideLoading();
                 setearViews(actor, activity);
                 createRecyclerView(actor.getPeliculas());
 

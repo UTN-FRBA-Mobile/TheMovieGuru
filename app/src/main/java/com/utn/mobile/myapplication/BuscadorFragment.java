@@ -131,6 +131,12 @@ public class BuscadorFragment extends Fragment {
         List<Pelicula> movies;
 
         @Override
+        protected void onPreExecute() {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.showLoading();
+        }
+
+        @Override
         protected Integer doInBackground(Object... params) {
             try {
                 //List<SearchCondition> searchConditions = getActivity().getSearchConditions();
@@ -150,6 +156,7 @@ public class BuscadorFragment extends Fragment {
             if (result == TASK_RESULT_OK) {
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
+                activity.hideLoading();
                 activity.setActors(actors);
                 activity.setMovies(movies);
                 createRecyclerView(actors, movies);
