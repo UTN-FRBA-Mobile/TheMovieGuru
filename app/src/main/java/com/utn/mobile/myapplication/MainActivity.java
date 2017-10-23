@@ -1,15 +1,20 @@
 package com.utn.mobile.myapplication;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
@@ -25,14 +30,18 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.utn.mobile.myapplication.component.AsapTextView;
 import com.utn.mobile.myapplication.domain.Actor;
 import com.utn.mobile.myapplication.domain.Genero;
 import com.utn.mobile.myapplication.domain.Pelicula;
 import com.utn.mobile.myapplication.service.GenreService;
+import com.utn.mobile.myapplication.utils.SpinnerDialog;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_ERROR;
 import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_OK;
@@ -45,6 +54,10 @@ public class MainActivity extends AppCompatActivity
     private List<Pelicula> mMovies = new ArrayList<>();
     private String mQuery;
     private static List<Genero> mGeneros = new ArrayList<>();
+    private int PROFILE_PIC_COUNT;
+    private static final int SELECT_FILE = 2;
+    private static final int REQUEST_CAMERA = 1;
+    ProgressDialog nDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,13 +130,25 @@ public class MainActivity extends AppCompatActivity
         setFragment(fragment, false, null);
     }
 
+    public void showLoading(){
+        nDialog = new ProgressDialog(this);
+        nDialog.setMessage("Cargando..");
+        nDialog.setIndeterminate(false);
+        nDialog.setCancelable(true);
+        nDialog.show();
+    }
+
+    public void hideLoading(){
+        nDialog.dismiss();
+    }
+
     public void setFragment(Fragment fragment, boolean toBackStack, String name ) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, fragment);
         if(toBackStack) {
             ft.addToBackStack(name);
         }
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 
     public void showMenu(View view) {
@@ -154,6 +179,11 @@ public class MainActivity extends AppCompatActivity
     */
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //No call for super(). Bug on API Level > 11.
+    }
+
+    @Override
     public void onNewIntent(Intent intent){
         setIntent(intent);
         if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -178,7 +208,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_user_fav_actors) {
             selectedFragment = new ActoresFavoritosFragment();
         } else if (id == R.id.nav_movie_recognizer) {
-            selectedFragment = new ReconocedorFragment();
+            showCameraDialog();
+            selected = false;
         } else if (id == R.id.nav_login) {
             selectedFragment = new LoginFragment();
         } else if (id == R.id.nav_close_session) {
@@ -195,6 +226,70 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void showCameraDialog(){
+        final CharSequence[] items = {"Tomar una foto", "Elegir de la galería", "Cerrar"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Añade una foto!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (items[item].equals("Tomar una foto")) {
+                    PROFILE_PIC_COUNT = 1;
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else if (items[item].equals("Elegir de la galería")) {
+                    PROFILE_PIC_COUNT = 1;
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent,SELECT_FILE);
+                } else if (items[item].equals("Cerrar")) {
+                    PROFILE_PIC_COUNT = 0;
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private Integer getRandomPath(){
+        Integer[] arrayPaths = {11, 12, 13, 14, 15, 30, 13475, 223};
+        int idx = new Random().nextInt(arrayPaths.length);
+        Integer path = (arrayPaths[idx]);
+        return path;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == REQUEST_CAMERA) {
+            if (resultCode == Activity.RESULT_OK) {
+                //get actual photo
+                Integer url_imagen = getRandomPath();
+                Bundle arguments = new Bundle();
+                arguments.putInt("url", url_imagen);
+                ReconocedorFragment reconocedorFragment = new ReconocedorFragment();
+                reconocedorFragment.setArguments(arguments);
+                setFragment(reconocedorFragment);
+                mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        }
+        else if (requestCode == SELECT_FILE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Integer url_imagen = getRandomPath();
+                Bundle arguments = new Bundle();
+                arguments.putInt("url", url_imagen);
+                ReconocedorFragment reconocedorFragment = new ReconocedorFragment();
+                reconocedorFragment.setArguments(arguments);
+                setFragment(reconocedorFragment);
+                mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     private class FindGenres extends AsyncTask<Object, Object, Integer> {

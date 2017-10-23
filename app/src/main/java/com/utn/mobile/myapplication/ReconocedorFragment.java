@@ -1,13 +1,30 @@
 package com.utn.mobile.myapplication;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+import com.utn.mobile.myapplication.domain.Pelicula;
+import com.utn.mobile.myapplication.service.SingleMovieService;
+
+import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_ERROR;
+import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_OK;
 
 
 public class ReconocedorFragment extends Fragment {
+
+    private Integer mId;
+    private ImageView movie_poster;
+    private Pelicula peli = new Pelicula();
+    private ProgressBar spinner;
+    MainActivity main;
 
     public ReconocedorFragment() {
     }
@@ -24,15 +41,52 @@ public class ReconocedorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            //args
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            mId = bundle.getInt("url");
         }
+    }
+
+    private class GetMovieInfo extends AsyncTask<Object, Object, Integer> {
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+                peli = SingleMovieService.get().getOne(mId);
+                return TASK_RESULT_OK;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (result == TASK_RESULT_OK) {
+                MainActivity activity = (MainActivity) getActivity();
+                if (activity == null) return;
+
+                setMovieInfo();
+                main.hideLoading();
+
+            }
+        }
+
+    }
+
+    public void setMovieInfo(){
+        ImageView imagen = (ImageView) getActivity().findViewById(R.id.imagen_reconocedor);
+        Picasso.with(this.getContext()).load("https://image.tmdb.org/t/p/w500"+ peli.getImg_poster()).into(imagen);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_reconocedor, container, false);
+        View view = inflater.inflate(R.layout.fragment_reconocedor, container, false);
+        main = (MainActivity) getActivity();
+        main.showLoading();
+        new GetMovieInfo().execute();
+        return view;
     }
 
 }
