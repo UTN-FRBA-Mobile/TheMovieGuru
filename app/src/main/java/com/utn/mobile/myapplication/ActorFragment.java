@@ -4,15 +4,18 @@ import android.content.Context;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -127,13 +130,24 @@ public class ActorFragment extends Fragment {
         final Button botonMas = (Button) activity.findViewById(R.id.button_bio);
         final Button botonMenos = (Button) activity.findViewById(R.id.button_bio_less);
 
-        bioTV.post(new Runnable() {
+        ViewTreeObserver vto = bioTV.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void run() {
-                int lineCount = bioTV.getLineCount();
-                if(lineCount<16)
-                {
-                    botonMas.setVisibility(View.GONE);
+            public void onGlobalLayout() {
+                Layout l = bioTV.getLayout();
+                if ( l != null){
+                    int lines = l.getLineCount();
+                    if ( lines > 0)
+                        if ( l.getEllipsisCount(lines-1) > 0)
+                            botonMas.setVisibility(View.VISIBLE);
+                    if (Build.VERSION.SDK_INT < 16)
+                    {
+                        bioTV.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    }
+                    else
+                    {
+                        bioTV.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
                 }
             }
         });
