@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     private static final int SELECT_FILE = 2;
     private static final int REQUEST_CAMERA = 1;
     ProgressDialog nDialog;
+    NavigationView nv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,15 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
+
+        String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
+        nv = (NavigationView) findViewById(R.id.nav_view);
+        if (token == null) {
+            nv.inflateMenu(R.menu.activity_main_drawer_unlogged);
+        }
+        else{
+            nv.inflateMenu(R.menu.activity_main_drawer);
+        }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -97,11 +107,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void changeDrawer(boolean logged){
+        nv = (NavigationView) findViewById(R.id.nav_view);
+        nv.getMenu().clear();
+        if(logged){
+            nv.inflateMenu(R.menu.activity_main_drawer);
+        }
+        else{
+            nv.inflateMenu(R.menu.activity_main_drawer_unlogged);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.options_menu, menu);
-        hideButtonsIfNecessary(menu);
+
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem searchItem = menu.findItem(R.id.search);
@@ -194,10 +216,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void hideButtonsIfNecessary(Menu menu){
-        String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
-        if(token == null){
-        }
+    private void closeSession(){
+        PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).edit().remove("user-token");
+        changeDrawer(false);
+        setFragment(new BuscadorFragment());
     }
 
     @Override
@@ -220,7 +242,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_login) {
             selectedFragment = new LoginFragment();
         } else if (id == R.id.nav_close_session) {
-            //closeSession()
+            closeSession();
             selected = false;
         }
         else {

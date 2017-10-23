@@ -32,6 +32,7 @@ public class LoginFragment extends Fragment {
     String contraseña;
     Usuario usuarioLoggeado;
     Button iniciarSesion;
+    MainActivity activity;
     public LoginFragment() {
 
     }
@@ -96,6 +97,12 @@ public class LoginFragment extends Fragment {
         Usuario usuario;
 
         @Override
+        protected void onPreExecute() {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.showLoading();
+        }
+
+        @Override
         protected Integer doInBackground(Object... params) {
             try {
                 usuario = SesionService.get().login(nombreDeUsuario,contraseña);
@@ -109,15 +116,17 @@ public class LoginFragment extends Fragment {
         @Override
         protected void onPostExecute(Integer result) {
             if (result == TASK_RESULT_OK) {
-                /*
-                MainActivity activity = (MainActivity) getActivity();
+
+                activity = (MainActivity) getActivity();
                 if (activity == null) return;
-*/
+
                 // setearViews(actor, activity);
                 // createRecyclerView(actor.getPeliculas());
+                activity.hideLoading();
                 usuarioLoggeado = usuario;
                 String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
-                Toast.makeText(MovieGuruApplication.getAppContext(), "El token guardado es " + token, Toast.LENGTH_LONG).show();
+                activity.changeDrawer(true);
+                Toast.makeText(activity.getApplicationContext(), "Te logueaste, si estuviera terminado te llevariamos al fragment de recomendaciones", Toast.LENGTH_LONG).show();
             }
         }
 
