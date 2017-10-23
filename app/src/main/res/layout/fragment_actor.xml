@@ -56,6 +56,7 @@
                 android:scaleX="0.9"
                 android:scaleY="0.9"
                 android:minWidth="500px"
+                android:minHeight="750px"
                 />
             <TextView
                 android:id="@+id/actor_bio"
