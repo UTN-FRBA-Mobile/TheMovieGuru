@@ -1,6 +1,7 @@
 package com.utn.mobile.myapplication;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.media.Image;
 import android.os.AsyncTask;

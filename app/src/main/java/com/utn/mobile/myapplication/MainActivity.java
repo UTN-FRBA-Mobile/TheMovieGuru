@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity
                 this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
         new FindGenres().execute();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.options_menu, menu);
+        hideButtonsIfNecessary(menu);
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem searchItem = menu.findItem(R.id.search);
@@ -190,6 +191,12 @@ public class MainActivity extends AppCompatActivity
             mQuery = intent.getStringExtra(SearchManager.QUERY);
             View parentLayout = findViewById(android.R.id.content);
             setFragment(new BuscadorFragment());
+        }
+    }
+
+    public void hideButtonsIfNecessary(Menu menu){
+        String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
+        if(token == null){
         }
     }
 
