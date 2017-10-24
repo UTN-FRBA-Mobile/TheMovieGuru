@@ -231,7 +231,15 @@ public class PeliculaFragment extends Fragment {
                 if (result == TASK_RESULT_OK) {
                     MainActivity activity = (MainActivity) getActivity();
                     if (activity == null) return;
-                    Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w342"+img_url).into(avh.actorImage);
+                    if(img_url.equals(""))
+                    {
+                        Picasso.with(getContext()).load(R.drawable.batman).into(avh.actorImage);
+
+                    }
+                    else
+                    {
+                        Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w342" + img_url).into(avh.actorImage);
+                    }
                 }
             }
 
