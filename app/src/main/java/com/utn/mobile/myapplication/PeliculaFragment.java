@@ -23,6 +23,7 @@ import com.utn.mobile.myapplication.domain.ActorEnPelicula;
 import com.utn.mobile.myapplication.domain.Imagen;
 import com.utn.mobile.myapplication.domain.Pelicula;
 import com.utn.mobile.myapplication.service.ActorService;
+import com.utn.mobile.myapplication.service.ImageService;
 import com.utn.mobile.myapplication.service.PeliculaService;
 import com.utn.mobile.myapplication.service.SingleActorService;
 import com.utn.mobile.myapplication.service.SingleMovieService;
@@ -135,10 +136,7 @@ public class PeliculaFragment extends Fragment {
         TextView actorName;
         TextView actorCharacter;
         CardView actorContainer;
-
-        TextView actorName2;
-        TextView actorCharacter2;
-        CardView actorContainer2;
+        ImageView actorImage;
 
         public ActorViewHolder(View itemView) {
             super(itemView);
@@ -146,9 +144,7 @@ public class PeliculaFragment extends Fragment {
             actorName = (TextView) itemView.findViewById(R.id.movie_actor_name);
             actorCharacter = (TextView) itemView.findViewById(R.id.movie_actor_character);
             actorContainer = (CardView) itemView.findViewById(R.id.actorContainer);
-            actorName2 = (TextView) itemView.findViewById(R.id.movie_actor_name2);
-            actorCharacter2 = (TextView) itemView.findViewById(R.id.movie_actor_character2);
-            actorContainer2 = (CardView) itemView.findViewById(R.id.actorContainer2);
+            actorImage = (ImageView) itemView.findViewById(R.id.movie_actor_image);
         }
     }
 
@@ -169,7 +165,7 @@ public class PeliculaFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return actors.size()/2;
+            return actors.size();
         }
 
         @Override
@@ -182,14 +178,17 @@ public class PeliculaFragment extends Fragment {
         @Override
         public void onBindViewHolder(ActorViewHolder avh, int i) {
 
-                final ActorEnPelicula item1 = actors.get(i * 2);
+                final ActorEnPelicula item = actors.get(i);
 
-                avh.actorName.setText(item1.getNombre());
-                avh.actorCharacter.setText(item1.getCharacter());
+                avh.actorName.setText(item.getNombre());
+                avh.actorCharacter.setText(item.getCharacter());
+
+                new FindImage(item.getId(),avh).execute();
+
                 avh.actorContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int id = item1.getId();
+                        int id = item.getId();
                         ActorFragment peliculaFragment = ActorFragment.newInstance(id);
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.fragment_container, peliculaFragment);
@@ -197,35 +196,51 @@ public class PeliculaFragment extends Fragment {
                         transaction.commit();
                     }
                 });
-
-            if (i * 2 + 1 <= actors.size()) {
-
-                final ActorEnPelicula item2 = actors.get(i * 2 + 1);
-                avh.actorName2.setText(item2.getNombre());
-                avh.actorCharacter2.setText(item2.getCharacter());
-                avh.actorContainer2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int id = item2.getId(); //usarlo para el get, hacer como el actor fragment
-                        ActorFragment peliculaFragment = ActorFragment.newInstance(id);
-                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment_container, peliculaFragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
-                    }
-                });
-            }
         }
 
         @Override
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {
             super.onAttachedToRecyclerView(recyclerView);
         }
+
+
+        private class FindImage extends AsyncTask<Object, Object, Integer> {
+            String img_url;
+            ActorViewHolder avh;
+            int id;
+
+            public FindImage(int ID, ActorViewHolder AVH)
+            {
+                id = ID;
+                avh = AVH;
+            }
+
+            @Override
+            protected Integer doInBackground(Object... params) {
+                try {
+                    img_url = ImageService.get().getOne(id);
+                    return TASK_RESULT_OK;
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    return TASK_RESULT_ERROR;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Integer result) {
+                if (result == TASK_RESULT_OK) {
+                    MainActivity activity = (MainActivity) getActivity();
+                    if (activity == null) return;
+                    Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w342"+img_url).into(avh.actorImage);
+                }
+            }
+
+        }
     }
 
     private void createRecyclerView(Collection<ActorEnPelicula> actors) {
         RecyclerView recyclerViewPeliculas = (RecyclerView) mRootView.findViewById(R.id.actorsRecyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerViewPeliculas.setLayoutManager(layoutManager);
 
         ARVAdapter adapterPeliculas = new ARVAdapter(actors);

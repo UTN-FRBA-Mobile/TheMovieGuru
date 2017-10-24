@@ -3,6 +3,7 @@
     <string name="base_url">http://tp-tacs-1c2017-themovieguru.7e14.starter-us-west-2.openshiftapps.com/api/v1</string>
     <string name="base_api">https://api.themoviedb.org/3/search</string>
     <string name="api_actor">%1$s/person?api_key=</string>
+    <string name="other_api_actor"> https://api.themoviedb.org/3/person/</string>
     <string name="api_pelicula">%1$s/movie?api_key=</string>
     <string name="url_actores">%1$s/buscador?type=actores</string>
     <string name="url_peliculas">%1$s/buscador?type=peliculas</string>

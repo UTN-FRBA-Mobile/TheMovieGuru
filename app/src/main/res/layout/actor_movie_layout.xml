@@ -17,10 +17,8 @@
 
                 <ImageView
                     android:id="@+id/actor_movie_poster"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:maxHeight="513px"
-                    android:adjustViewBounds="true"
+                    android:layout_height="513px"
+                    android:layout_width="342px"
                     android:paddingEnd="5dp"
                     android:paddingStart="5dp"
                     android:paddingTop="5dp"/>
