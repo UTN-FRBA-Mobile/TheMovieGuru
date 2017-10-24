@@ -36,6 +36,7 @@ import com.utn.mobile.myapplication.component.AsapTextView;
 import com.utn.mobile.myapplication.domain.Actor;
 import com.utn.mobile.myapplication.domain.Genero;
 import com.utn.mobile.myapplication.domain.Pelicula;
+import com.utn.mobile.myapplication.service.ActorFavService;
 import com.utn.mobile.myapplication.service.GenreService;
 import com.utn.mobile.myapplication.utils.SpinnerDialog;
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout mDrawerLayout;
     private List<Actor> mActors = new ArrayList<>();
     private List<Pelicula> mMovies = new ArrayList<>();
+    private List<Actor> mActoresFav = new ArrayList<>();
     private String mQuery;
     private static List<Genero> mGeneros = new ArrayList<>();
     private int PROFILE_PIC_COUNT;
@@ -93,6 +95,13 @@ public class MainActivity extends AppCompatActivity
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         new FindGenres().execute();
+
+        int user_id =  PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getInt("user-id", -1);
+
+        if(user_id>=0)
+        {
+            new FindFavs(user_id).execute();
+        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -217,7 +226,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void closeSession(){
-        PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).edit().remove("user-token");
+        PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).edit().remove("user-token").apply();
         changeDrawer(false);
         setFragment(new BuscadorFragment());
     }
@@ -336,6 +345,28 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private class FindFavs extends AsyncTask<Object, Object, Integer> {
+
+        int user_id;
+
+        public FindFavs(int id)
+        {
+            user_id = id;
+        }
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+                //List<SearchCondition> searchConditions = getActivity().getSearchConditions();
+                mActoresFav = ActorFavService.get().getAll(user_id);
+                return TASK_RESULT_OK;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+    }
+
 
     public static String getGenreById(int id)
     {
@@ -352,7 +383,10 @@ public class MainActivity extends AppCompatActivity
 
     public void setActors(List<Actor> actors) { this.mActors = actors; }
     public void setMovies(List<Pelicula> movies) { this.mMovies = movies; }
+    public void setmActoresFav(List<Actor> favs) { this.mActoresFav = favs; }
+    public void addActorAMFavs(Actor actor) { this.mActoresFav.add(actor); }
     public void setGenres(List<Genero> genres) { this.mGeneros = genres; }
     public void setQuery(String query) { this.mQuery = query; }
     public String getQuery() { return mQuery; }
+    public List<Actor> getmActoresFav() { return mActoresFav; }
 }

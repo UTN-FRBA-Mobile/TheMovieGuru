@@ -10,5 +10,6 @@
     <string name="url_actor">%1$s/actores/</string>
     <string name="url_pelicula">%1$s/peliculas/</string>
     <string name="url_login">%1$s/login/</string>
+    <string name="url_usuario">%1$s/usuarios/</string>
 
 </resources>

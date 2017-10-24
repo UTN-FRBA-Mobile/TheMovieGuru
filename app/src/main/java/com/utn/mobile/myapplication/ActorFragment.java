@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.utn.mobile.myapplication.domain.Actor;
@@ -178,6 +180,36 @@ public class ActorFragment extends Fragment {
         });
 
 
+        final int user_id =  PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getInt("user-id", -1);
+
+        final ImageView favIV = (ImageView) activity.findViewById(R.id.favorito_icon);
+        final ImageView notFavIV = (ImageView) activity.findViewById(R.id.no_favorito_icon);
+
+        if(findActorInFavs(actor, activity))
+        {
+            favIV.setVisibility(View.VISIBLE);
+            notFavIV.setVisibility(View.GONE);
+            favIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new RemoveFav(actor, user_id).execute();
+                }
+            });
+        }
+        else
+        {
+            favIV.setVisibility(View.GONE);
+            notFavIV.setVisibility(View.VISIBLE);
+            notFavIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AddFav(actor, user_id).execute();
+                    favIV.setVisibility(View.VISIBLE);
+                    notFavIV.setVisibility(View.GONE);
+                }
+            });
+        }
+
         ScrollView scrollViewActor = (ScrollView) activity.findViewById(R.id.scrollActor);
         scrollViewActor.setVisibility(View.VISIBLE);
     }
@@ -201,6 +233,123 @@ public class ActorFragment extends Fragment {
                 Picasso.with(this.getContext()).load("https://image.tmdb.org/t/p/w500" + url_imagen).into(imagenIV);
             }
         }
+    }
+
+    private boolean findActorInFavs(Actor actor, MainActivity activity)
+    {
+        List<Actor> actoresFav = activity.getmActoresFav();
+
+        for(int i=0; i<actoresFav.size(); i++)
+        {
+            Actor actorcin = actoresFav.get(i);
+
+            if(actor.equals(actorcin))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private class AddFav extends AsyncTask<Object, Object, Integer> {
+        Actor actor;
+        int user_id;
+
+        public AddFav(Actor act, int id)
+        {
+            actor = act;
+            user_id = id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Toast.makeText(getContext(),"Agregando actor a favoritos...",Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+                String response = SingleActorService.get().addOne(actor, user_id);
+                if(response!=null)
+                {
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.addActorAMFavs(actor);
+                    return TASK_RESULT_OK;
+                }
+                else
+                {
+                    return TASK_RESULT_ERROR;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (result == TASK_RESULT_OK) {
+                MainActivity activity = (MainActivity) getActivity();
+                if (activity == null) return;
+                if(findActorInFavs(actor, activity))
+                {
+                    Toast.makeText(getContext(),"El actor se agregó con éxito a favoritos.", Toast.LENGTH_LONG).show();
+                }
+            }
+            else
+            {
+                MainActivity activity = (MainActivity) getActivity();
+                Toast.makeText(getContext(),"Ocurrió un problema al agregar el actor a favoritos.", Toast.LENGTH_LONG).show();
+                ImageView favIV = (ImageView) activity.findViewById(R.id.favorito_icon);
+                ImageView notFavIV = (ImageView) activity.findViewById(R.id.no_favorito_icon);
+                if(favIV!=null && notFavIV!=null) {
+                    favIV.setVisibility(View.GONE);
+                    notFavIV.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
+    }
+
+    private class RemoveFav extends AsyncTask<Object, Object, Integer> {
+        Actor actor;
+        int user_id;
+
+        public RemoveFav(Actor act, int id)
+        {
+            actor = act;
+            user_id = id;
+        }
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+                //img_url = ImageService.get().getOne(id);
+                return TASK_RESULT_OK;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (result == TASK_RESULT_OK) {
+                MainActivity activity = (MainActivity) getActivity();
+                if (activity == null) return;
+                /*if(img_url.equals(""))
+                {
+                    Picasso.with(getContext()).load(R.drawable.batman).into(avh.actorImage);
+
+                }
+                else
+                {
+                    Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w342" + img_url).into(avh.actorImage);
+                }*/
+            }
+        }
+
     }
 
     private class PeliViewHolder extends RecyclerView.ViewHolder {

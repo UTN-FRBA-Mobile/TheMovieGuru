@@ -3,8 +3,10 @@ package com.utn.mobile.myapplication.service;
 
 import com.utn.mobile.myapplication.R;
 import com.utn.mobile.myapplication.domain.Actor;
+import com.utn.mobile.myapplication.domain.ActorEnPelicula;
 import com.utn.mobile.myapplication.domain.Imagen;
 import com.utn.mobile.myapplication.domain.Pelicula;
+import com.utn.mobile.myapplication.domain.Review;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +37,15 @@ public class SingleActorService extends AbstractService {
         String actorId = String.valueOf(id);
         Actor actor = (Actor) get(url + actorId, key, authentication);
         return actor;
+    }
+
+    public String addOne(Actor actor, int user_id)
+    {
+        String url = String.format(context.getString(R.string.url_usuario), context.getString(R.string.base_url));
+        String userId = String.valueOf(user_id);
+        JSONObject jsonActor = actor.toJSON();
+        String response = postAuthenticated(url+userId+"/actores_favoritos",jsonActor);
+        return response;
     }
 
     @Override

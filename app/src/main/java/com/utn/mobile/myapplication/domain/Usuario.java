@@ -3,6 +3,7 @@ package com.utn.mobile.myapplication.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Usuario {
 
@@ -25,8 +26,8 @@ public class Usuario {
     private String password;
 
     private int listasCreadas = 0;
-    private Collection<Actor> actores_favoritos  = new ArrayList<>();;
-    private Collection<Lista> listas_peliculas = new ArrayList<>();
+    private List<Actor> actores_favoritos  = new ArrayList<>();;
+    private List<Lista> listas_peliculas = new ArrayList<>();
 
     public Usuario()
     {
@@ -81,19 +82,19 @@ public class Usuario {
         this.listasCreadas = listasCreadas;
     }
 
-    public Collection<Actor> getActores_favoritos() {
+    public List<Actor> getActores_favoritos() {
         return actores_favoritos;
     }
 
-    public void setActores_favoritos(Collection<Actor> actores_favoritos) {
+    public void setActores_favoritos(List<Actor> actores_favoritos) {
         this.actores_favoritos = actores_favoritos;
     }
 
-    public Collection<Lista> getListas_peliculas() {
+    public List<Lista> getListas_peliculas() {
         return listas_peliculas;
     }
 
-    public void setListas_peliculas(Collection<Lista> listas_peliculas) {
+    public void setListas_peliculas(List<Lista> listas_peliculas) {
         this.listas_peliculas = listas_peliculas;
     }
 
