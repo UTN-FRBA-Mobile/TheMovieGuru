@@ -251,7 +251,7 @@ public class BuscadorFragment extends Fragment {
 
             if (imagen.equals("null"))
             {
-                Picasso.with(getContext()).load(R.drawable.batman).into(avh.itemImage);
+                Picasso.with(getContext()).load(R.drawable.batman_300).into(avh.itemImage);
             }
             else
             {
@@ -350,7 +350,7 @@ public class BuscadorFragment extends Fragment {
 
             if (imagen.equals("null"))
             {
-                Picasso.with(getContext()).load(R.drawable.batman).into(pvh.itemImage);
+                Picasso.with(getContext()).load(R.drawable.batman_300).into(pvh.itemImage);
             }
             else
             {
