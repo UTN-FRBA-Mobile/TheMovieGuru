@@ -3,6 +3,7 @@ package com.utn.mobile.myapplication;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,17 @@ public class ReconocedorFragment extends Fragment {
     public void setMovieInfo(){
         ImageView imagen = (ImageView) getActivity().findViewById(R.id.imagen_reconocedor);
         Picasso.with(this.getContext()).load("https://image.tmdb.org/t/p/w500"+ peli.getImg_poster()).into(imagen);
+        imagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = peli.getId();
+                PeliculaFragment peliculaFragment = PeliculaFragment.newInstance(id);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, peliculaFragment);
+                transaction.addToBackStack("fragment_container");
+                transaction.commit();
+            }
+        });
     }
 
     @Override
