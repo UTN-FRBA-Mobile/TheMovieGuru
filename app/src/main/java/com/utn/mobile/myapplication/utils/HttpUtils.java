@@ -18,10 +18,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import org.apache.http.entity.StringEntity;
 
 /**
  * Created by lucho on 29/09/17.
@@ -36,7 +38,7 @@ public class HttpUtils {
 
     public static String post(String endpoint, JSONObject params, boolean authentication)
             throws IOException {
-        return request(endpoint, params, "POST", authentication);
+        return pruebaPost(endpoint, params, "POST", authentication);
     }
 
     public static String postEncoded(String endpoint, String params)
@@ -109,6 +111,46 @@ public class HttpUtils {
             if (conn != null) {
                 conn.disconnect();
             }
+        }
+    }
+
+    public static String pruebaPost(String endpoint, JSONObject params, String method, boolean secure) throws IOException {
+        HttpURLConnection urlConnection = null;
+        String response;
+        try {
+            URL url = new URL(endpoint);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod(method);
+            urlConnection.setReadTimeout(30 * 1000);
+            urlConnection.setDoInput(true);
+
+            if (secure) {
+                Context context = MovieGuruApplication.getAppContext();
+            }
+
+            if (params != null) {
+                urlConnection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                //urlConnection.setFixedLengthStreamingMode(params.toString().length());
+                urlConnection.setDoOutput(true);
+                DataOutputStream dos = new DataOutputStream(urlConnection.getOutputStream());
+                StringEntity se = new StringEntity(params.toString(), "UTF-8");
+                se.writeTo(dos);
+                dos.flush();
+                dos.close();
+            }
+
+            int status = urlConnection.getResponseCode();
+            InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            response = readStream(in);
+            if (status != 200) {
+                throw new IOException(method + " failed with error code " + status);
+            }
+            return response;
+
+        }
+        finally {
+            if (urlConnection != null)
+                urlConnection.disconnect();
         }
     }
 
