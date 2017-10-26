@@ -240,8 +240,7 @@ public class PeliculaFragment extends Fragment {
                     if (activity == null) return;
                     if(img_url.equals(""))
                     {
-                        Picasso.with(getContext()).load(R.drawable.batman).into(avh.actorImage);
-
+                        Picasso.with(getContext()).load(R.drawable.batman_300).into(avh.actorImage);
                     }
                     else
                     {

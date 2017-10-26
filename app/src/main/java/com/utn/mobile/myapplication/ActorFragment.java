@@ -399,7 +399,15 @@ public class ActorFragment extends Fragment {
             final Pelicula item = movies.get(i);
 
             pvh.movieName.setText(item.getNombre());
-            Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w342"+item.getImg_poster()).into(pvh.moviePoster);
+
+            if(item.getImg_poster().equals("null"))
+            {
+                Picasso.with(getContext()).load(R.drawable.batman_300).into(pvh.moviePoster);
+            }
+            else
+            {
+                Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w342" + item.getImg_poster()).into(pvh.moviePoster);
+            }
 
             pvh.movieContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
