@@ -62,7 +62,8 @@
                 android:paddingTop="12dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="10dp"
-                app:srcCompat="@mipmap/ic_launcher" />
+                app:srcCompat="@mipmap/ic_launcher"
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/actor_bio"

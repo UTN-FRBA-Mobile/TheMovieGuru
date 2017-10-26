@@ -17,9 +17,10 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="wrap_content"
+                android:layout_width="300px"
                 android:layout_height="match_parent"
-                android:id="@+id/listItemImage"/>
+                android:id="@+id/listItemImage"
+                android:scaleType="fitXY"/>
 
             <LinearLayout
                 android:layout_height="match_parent"

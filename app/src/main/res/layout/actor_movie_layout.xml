@@ -20,7 +20,8 @@
                     android:layout_height="513px"
                     android:layout_width="342px"
                     android:paddingEnd="5dp"
-                    android:paddingStart="5dp"/>
+                    android:paddingStart="5dp"
+                    android:scaleType="fitXY"/>
                 <TextView
                     android:id="@+id/actor_movie_title"
                     android:layout_height="wrap_content"

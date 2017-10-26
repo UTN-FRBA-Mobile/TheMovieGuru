@@ -54,6 +54,7 @@
                     android:scaleY="0.9"
                     android:adjustViewBounds="true"
                     android:minWidth="500px"
+                    android:scaleType="fitXY"
                     />
                 <TextView
                     android:id="@+id/movie_plot"

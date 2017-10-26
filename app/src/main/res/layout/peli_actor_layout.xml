@@ -20,6 +20,7 @@
                 android:layout_height="513px"
                 android:id="@+id/movie_actor_image"
                 android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
                 />
 
             <TextView
