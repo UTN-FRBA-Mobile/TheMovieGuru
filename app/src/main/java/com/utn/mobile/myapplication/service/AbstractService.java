@@ -24,6 +24,7 @@ import com.utn.mobile.myapplication.cache.CacheClient;
 import com.utn.mobile.myapplication.interfaces.Closure;
 import com.utn.mobile.myapplication.utils.GlobalConstants;
 
+import static com.utn.mobile.myapplication.utils.HttpUtils.delete;
 import static com.utn.mobile.myapplication.utils.HttpUtils.post;
 import static com.utn.mobile.myapplication.utils.HttpUtils.urlEncodedRequest;
 
@@ -83,6 +84,29 @@ public abstract class AbstractService {
         for (int i = 1; i <= MAX_ATTEMPTS; i++) {
             try {
                 response = post(endpoint, params, true);
+                return response;
+            } catch (IOException e) {
+                if (i == MAX_ATTEMPTS) {
+                    break;
+                }
+                try {
+                    Thread.sleep(backoff);
+                } catch (InterruptedException e1) {
+                    Thread.currentThread().interrupt();
+                }
+                backoff *= 2;
+            }
+        }
+        return response;
+    }
+
+    protected String remove(String endpoint){
+        String response = null;
+        Random random = new Random();
+        long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(100);
+        for (int i = 1; i <= MAX_ATTEMPTS; i++) {
+            try {
+                response = delete(endpoint, true);
                 return response;
             } catch (IOException e) {
                 if (i == MAX_ATTEMPTS) {

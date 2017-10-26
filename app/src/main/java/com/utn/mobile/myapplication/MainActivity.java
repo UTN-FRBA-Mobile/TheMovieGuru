@@ -100,11 +100,16 @@ public class MainActivity extends AppCompatActivity
 
         if(user_id>=0)
         {
-            new FindFavs(user_id).execute();
+            findFavsForUser(user_id, false);
         }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void findFavsForUser(int user_id, boolean modified)
+    {
+        new FindFavs(user_id, modified).execute();
     }
 
     @Override
@@ -349,17 +354,19 @@ public class MainActivity extends AppCompatActivity
     private class FindFavs extends AsyncTask<Object, Object, Integer> {
 
         int user_id;
+        boolean modified;
 
-        public FindFavs(int id)
+        public FindFavs(int id, boolean modif)
         {
             user_id = id;
+            modified = modif;
         }
 
         @Override
         protected Integer doInBackground(Object... params) {
             try {
                 //List<SearchCondition> searchConditions = getActivity().getSearchConditions();
-                mActoresFav = ActorFavService.get().getAll(user_id);
+                mActoresFav = ActorFavService.get().getAll(user_id, modified);
                 return TASK_RESULT_OK;
             } catch (Exception ex) {
                 ex.printStackTrace();

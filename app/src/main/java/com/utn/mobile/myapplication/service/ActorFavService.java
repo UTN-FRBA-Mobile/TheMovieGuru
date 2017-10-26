@@ -1,6 +1,8 @@
 package com.utn.mobile.myapplication.service;
 
 
+import android.text.method.DateTimeKeyListener;
+
 import com.utn.mobile.myapplication.R;
 import com.utn.mobile.myapplication.domain.Actor;
 import com.utn.mobile.myapplication.domain.Imagen;
@@ -12,7 +14,9 @@ import org.json.JSONObject;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class ActorFavService extends AbstractService {
     //Singleton
@@ -25,18 +29,24 @@ public class ActorFavService extends AbstractService {
         restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
     }
 
-    public List<Actor> getAll(boolean authentication, int user_id) {
+    public List<Actor> getAll(boolean authentication, int user_id, boolean modified) {
         String base_url = String.format(context.getString(R.string.url_usuario), context.getString(R.string.base_url));
         String userId = String.valueOf(user_id);
-        String key = context.getString(R.string.cache_key_actor)+userId;
+        Date fecha = new Date();
+        String key = context.getString(R.string.cache_key_actor)+userId+fecha.toString();
+        if(modified)
+        {
+            Random rand = new Random();
+            key+=rand.toString();
+        }
 
-        List<Actor> actors = (List<Actor>) get(base_url + userId + "/actores_favoritos", key, authentication);
+        List<Actor> actors = (List<Actor>) get(base_url + userId + "/actores_favoritos", key);
 
         return actors;
     }
 
-    public List<Actor> getAll(int user_id) {
-        return getAll(false, user_id);
+    public List<Actor> getAll(int user_id, boolean modified) {
+        return getAll(false, user_id, modified);
     }
 
 
@@ -61,7 +71,7 @@ public class ActorFavService extends AbstractService {
                 JSONArray imagesJsonArray = jsonObject.getJSONArray("imagenes");
 
                 for (int j = 0; j < moviesJsonArray.length(); j++) {
-                    JSONObject jsonPeli = moviesJsonArray.getJSONObject(i);
+                    JSONObject jsonPeli = moviesJsonArray.getJSONObject(j);
                     Pelicula peli = new Pelicula();
                     peli.setId(jsonPeli.getInt("id"));
                     peli.setNombre(jsonPeli.getString("original_title"));
@@ -69,8 +79,8 @@ public class ActorFavService extends AbstractService {
                     pelis.add(peli);
                 }
 
-                for (int j = 0; j < imagesJsonArray.length(); j++) {
-                    JSONObject jsonImg = imagesJsonArray.getJSONObject(i);
+                for (int k = 0; k < imagesJsonArray.length(); k++) {
+                    JSONObject jsonImg = imagesJsonArray.getJSONObject(k);
                     imagenes.add(new Imagen(jsonImg.getString("file_path")));
                 }
 

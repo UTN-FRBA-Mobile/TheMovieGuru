@@ -189,26 +189,30 @@ public class ActorFragment extends Fragment {
         {
             favIV.setVisibility(View.VISIBLE);
             notFavIV.setVisibility(View.GONE);
-            favIV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new RemoveFav(actor, user_id).execute();
-                }
-            });
         }
         else
         {
             favIV.setVisibility(View.GONE);
             notFavIV.setVisibility(View.VISIBLE);
-            notFavIV.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new AddFav(actor, user_id).execute();
-                    favIV.setVisibility(View.VISIBLE);
-                    notFavIV.setVisibility(View.GONE);
-                }
-            });
         }
+
+        favIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RemoveFav(actor, user_id).execute();
+                favIV.setVisibility(View.GONE);
+                notFavIV.setVisibility(View.VISIBLE);
+            }
+        });
+
+        notFavIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AddFav(actor, user_id).execute();
+                favIV.setVisibility(View.VISIBLE);
+                notFavIV.setVisibility(View.GONE);
+            }
+        });
 
         ScrollView scrollViewActor = (ScrollView) activity.findViewById(R.id.scrollActor);
         scrollViewActor.setVisibility(View.VISIBLE);
@@ -264,7 +268,7 @@ public class ActorFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            Toast.makeText(getContext(),"Agregando actor a favoritos...",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"Agregando actor a favoritos...",Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -274,7 +278,7 @@ public class ActorFragment extends Fragment {
                 if(response!=null)
                 {
                     MainActivity activity = (MainActivity) getActivity();
-                    activity.addActorAMFavs(actor);
+                    activity.findFavsForUser(user_id, true);
                     return TASK_RESULT_OK;
                 }
                 else
@@ -323,9 +327,16 @@ public class ActorFragment extends Fragment {
         }
 
         @Override
+        protected void onPreExecute() {
+            Toast.makeText(getContext(),"Eliminando actor de favoritos...",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
         protected Integer doInBackground(Object... params) {
             try {
-                //img_url = ImageService.get().getOne(id);
+                String response = SingleActorService.get().removeOne(actor.getId(), user_id);
+                MainActivity activity = (MainActivity) getActivity();
+                activity.findFavsForUser(user_id, true);
                 return TASK_RESULT_OK;
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -338,15 +349,21 @@ public class ActorFragment extends Fragment {
             if (result == TASK_RESULT_OK) {
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
-                /*if(img_url.equals(""))
+                if(!findActorInFavs(actor, activity))
                 {
-                    Picasso.with(getContext()).load(R.drawable.batman).into(avh.actorImage);
-
+                    Toast.makeText(getContext(),"El actor se eliminó con éxito de sus favoritos.", Toast.LENGTH_LONG).show();
                 }
-                else
-                {
-                    Picasso.with(getContext()).load("https://image.tmdb.org/t/p/w342" + img_url).into(avh.actorImage);
-                }*/
+            }
+            else
+            {
+                MainActivity activity = (MainActivity) getActivity();
+                Toast.makeText(getContext(),"Ocurrió un problema al eliminar el actor de favoritos.", Toast.LENGTH_LONG).show();
+                ImageView favIV = (ImageView) activity.findViewById(R.id.favorito_icon);
+                ImageView notFavIV = (ImageView) activity.findViewById(R.id.no_favorito_icon);
+                if(favIV!=null && notFavIV!=null) {
+                    favIV.setVisibility(View.VISIBLE);
+                    notFavIV.setVisibility(View.GONE);
+                }
             }
         }
 

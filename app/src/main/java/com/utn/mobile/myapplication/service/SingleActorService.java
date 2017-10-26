@@ -48,6 +48,15 @@ public class SingleActorService extends AbstractService {
         return response;
     }
 
+    public String removeOne(int actor_id, int user_id)
+    {
+        String url = String.format(context.getString(R.string.url_usuario), context.getString(R.string.base_url));
+        String userId = String.valueOf(user_id);
+        String actorId = String.valueOf(actor_id);
+        String response = remove(url+userId+"/actores_favoritos/"+actorId);
+        return response;
+    }
+
     @Override
     protected Actor deserialize(String json) {
         try {

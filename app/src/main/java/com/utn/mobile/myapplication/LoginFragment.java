@@ -126,6 +126,7 @@ public class LoginFragment extends Fragment {
                 usuarioLoggeado = usuario;
                 String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
                 activity.changeDrawer(true);
+                activity.findFavsForUser(usuario.getUserId(),true);
                 Toast.makeText(activity.getApplicationContext(), "Te logueaste, si estuviera terminado te llevariamos al fragment de recomendaciones", Toast.LENGTH_LONG).show();
             }
         }

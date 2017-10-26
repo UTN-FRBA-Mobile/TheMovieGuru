@@ -51,6 +51,16 @@ public class HttpUtils {
         return request(endpoint, params, "PUT", authentication);
     }
 
+    public static String delete(String endpoint)
+            throws IOException {
+        return deleteItem(endpoint, "DELETE", false);
+    }
+
+    public static String delete(String endpoint, boolean authentication)
+            throws IOException {
+        return deleteItem(endpoint, "DELETE", authentication);
+    }
+
     public static String getDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
         boolean first = true;
@@ -151,6 +161,47 @@ public class HttpUtils {
         finally {
             if (urlConnection != null)
                 urlConnection.disconnect();
+        }
+    }
+
+    public static String deleteItem(String endpoint, String method, boolean authentication)
+            throws IOException {
+
+        URL url;
+        String response;
+        try {
+            url = new URL(endpoint);
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException("invalid url: " + endpoint);
+        }
+
+        HttpURLConnection conn = null;
+        try {
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setUseCaches(false);
+            conn.setRequestMethod(method);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("charset", "utf-8");
+            if(authentication){
+                Context context = MovieGuruApplication.getAppContext();
+                /*
+                Token de logueo
+                String token = PreferenceManager.getDefaultSharedPreferences(context).getString(SignInPreferences.AUTH_SERVER_TOKEN, "");
+                conn.setRequestProperty ("Authorization", "Token token=" + token);
+                */
+            }
+            int status = conn.getResponseCode();
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            response = readStream(in);
+            if (status != 200) {
+                throw new IOException(method + " failed with error code " + status);
+            }
+            return response;
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
     }
 
