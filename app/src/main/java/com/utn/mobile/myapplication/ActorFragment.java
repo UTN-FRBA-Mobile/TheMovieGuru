@@ -182,37 +182,37 @@ public class ActorFragment extends Fragment {
 
         final int user_id =  PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getInt("user-id", -1);
 
-        final ImageView favIV = (ImageView) activity.findViewById(R.id.favorito_icon);
-        final ImageView notFavIV = (ImageView) activity.findViewById(R.id.no_favorito_icon);
+        if(user_id>=0) {
 
-        if(findActorInFavs(actor, activity))
-        {
-            favIV.setVisibility(View.VISIBLE);
-            notFavIV.setVisibility(View.GONE);
-        }
-        else
-        {
-            favIV.setVisibility(View.GONE);
-            notFavIV.setVisibility(View.VISIBLE);
-        }
+            final ImageView favIV = (ImageView) activity.findViewById(R.id.favorito_icon);
+            final ImageView notFavIV = (ImageView) activity.findViewById(R.id.no_favorito_icon);
 
-        favIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new RemoveFav(actor, user_id).execute();
+            if (findActorInFavs(actor, activity)) {
+                favIV.setVisibility(View.VISIBLE);
+                notFavIV.setVisibility(View.GONE);
+            } else {
                 favIV.setVisibility(View.GONE);
                 notFavIV.setVisibility(View.VISIBLE);
             }
-        });
 
-        notFavIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AddFav(actor, user_id).execute();
-                favIV.setVisibility(View.VISIBLE);
-                notFavIV.setVisibility(View.GONE);
-            }
-        });
+            favIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new RemoveFav(actor, user_id).execute();
+                    favIV.setVisibility(View.GONE);
+                    notFavIV.setVisibility(View.VISIBLE);
+                }
+            });
+
+            notFavIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AddFav(actor, user_id).execute();
+                    favIV.setVisibility(View.VISIBLE);
+                    notFavIV.setVisibility(View.GONE);
+                }
+            });
+        }
 
         ScrollView scrollViewActor = (ScrollView) activity.findViewById(R.id.scrollActor);
         scrollViewActor.setVisibility(View.VISIBLE);

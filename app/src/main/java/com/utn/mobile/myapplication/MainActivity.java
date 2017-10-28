@@ -232,6 +232,7 @@ public class MainActivity extends AppCompatActivity
 
     private void closeSession(){
         PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).edit().remove("user-token").apply();
+        PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).edit().remove("user-id").apply();
         changeDrawer(false);
         mActoresFav = new ArrayList<Actor>();
         setFragment(new BuscadorFragment());
