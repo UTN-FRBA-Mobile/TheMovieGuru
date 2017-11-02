@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -373,14 +374,15 @@ public class ActorFragment extends Fragment {
 
         ImageView moviePoster;
         TextView movieName;
-        CardView movieContainer;
+        RelativeLayout movieContainer;
+        CardView moviePosterContainer;
 
         public PeliViewHolder(View itemView) {
             super(itemView);
 
             moviePoster = (ImageView) itemView.findViewById(R.id.actor_movie_poster);
             movieName = (TextView) itemView.findViewById(R.id.actor_movie_title);
-            movieContainer = (CardView) itemView.findViewById(R.id.peliContainer);
+            movieContainer = (RelativeLayout) itemView.findViewById(R.id.peliContainer);
         }
     }
 

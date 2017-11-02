@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
 
-<android.support.v7.widget.CardView
+    <RelativeLayout
         android:id="@+id/peliContainer"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent">
+        android:layout_height="wrap_content"
+        >
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
+            <android.support.v7.widget.CardView
+                android:id="@+id/actor_movie_poster_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:background="@android:color/transparent"
+                >
 
                 <ImageView
                     android:id="@+id/actor_movie_poster"
                     android:layout_height="513px"
                     android:layout_width="342px"
-                    android:paddingEnd="5dp"
-                    android:paddingStart="5dp"
                     android:scaleType="fitXY"/>
-                <TextView
+
+            </android.support.v7.widget.CardView>
+
+        <TextView
                     android:id="@+id/actor_movie_title"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
@@ -34,12 +40,9 @@
                     android:ellipsize="end"
                     android:paddingEnd="5dp"
                     android:paddingStart="5dp"
-                    android:layout_alignStart="@+id/actor_movie_poster"
-                    android:layout_alignEnd="@+id/actor_movie_poster"
-                    android:layout_below="@+id/actor_movie_poster"/>
+                    android:layout_alignStart="@+id/actor_movie_poster_container"
+                    android:layout_alignEnd="@+id/actor_movie_poster_container"
+                    android:layout_below="@+id/actor_movie_poster_container"/>
 
         </RelativeLayout>
-
-    </android.support.v7.widget.CardView>
-
 </LinearLayout>
