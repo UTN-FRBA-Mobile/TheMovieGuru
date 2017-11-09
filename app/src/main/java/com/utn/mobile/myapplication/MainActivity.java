@@ -394,6 +394,7 @@ public class MainActivity extends AppCompatActivity
     public void setMovies(List<Pelicula> movies) { this.mMovies = movies; }
     public void setmActoresFav(List<Actor> favs) { this.mActoresFav = favs; }
     public void addActorAMFavs(Actor actor) { this.mActoresFav.add(actor); }
+    public void removeActorDeMFavs(Actor actor) { this.mActoresFav.remove(actor); }
     public void setGenres(List<Genero> genres) { this.mGeneros = genres; }
     public void setQuery(String query) { this.mQuery = query; }
     public String getQuery() { return mQuery; }

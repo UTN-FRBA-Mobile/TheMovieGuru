@@ -269,7 +269,8 @@ public class ActorFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            Toast.makeText(getContext(),"Agregando actor a favoritos...",Toast.LENGTH_SHORT).show();
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.addActorAMFavs(actor);
         }
 
         @Override
@@ -297,15 +298,12 @@ public class ActorFragment extends Fragment {
             if (result == TASK_RESULT_OK) {
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
-                if(findActorInFavs(actor, activity))
-                {
-                    Toast.makeText(getContext(),"El actor se agregó con éxito a favoritos.", Toast.LENGTH_LONG).show();
-                }
             }
             else
             {
                 MainActivity activity = (MainActivity) getActivity();
                 Toast.makeText(getContext(),"Ocurrió un problema al agregar el actor a favoritos.", Toast.LENGTH_LONG).show();
+                activity.removeActorDeMFavs(actor);
                 ImageView favIV = (ImageView) activity.findViewById(R.id.favorito_icon);
                 ImageView notFavIV = (ImageView) activity.findViewById(R.id.no_favorito_icon);
                 if(favIV!=null && notFavIV!=null) {
@@ -329,7 +327,8 @@ public class ActorFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            Toast.makeText(getContext(),"Eliminando actor de favoritos...",Toast.LENGTH_SHORT).show();
+            MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.removeActorDeMFavs(actor);
         }
 
         @Override
@@ -350,15 +349,12 @@ public class ActorFragment extends Fragment {
             if (result == TASK_RESULT_OK) {
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
-                if(!findActorInFavs(actor, activity))
-                {
-                    Toast.makeText(getContext(),"El actor se eliminó con éxito de sus favoritos.", Toast.LENGTH_LONG).show();
-                }
             }
             else
             {
                 MainActivity activity = (MainActivity) getActivity();
                 Toast.makeText(getContext(),"Ocurrió un problema al eliminar el actor de favoritos.", Toast.LENGTH_LONG).show();
+                activity.addActorAMFavs(actor);
                 ImageView favIV = (ImageView) activity.findViewById(R.id.favorito_icon);
                 ImageView notFavIV = (ImageView) activity.findViewById(R.id.no_favorito_icon);
                 if(favIV!=null && notFavIV!=null) {
