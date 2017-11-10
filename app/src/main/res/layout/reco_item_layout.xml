@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/recoContainer1"
+        android:layout_width="500px"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:layout_weight="0.5">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="750px"
+                android:id="@+id/reco_poster1"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                />
+
+            <TextView
+                android:id="@+id/reco_title1"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="1dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/reco_poster1"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/recoContainer2"
+        android:layout_width="500px"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_margin="4dp"
+        android:visibility="invisible"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="750px"
+                android:id="@+id/reco_poster2"
+                android:layout_centerHorizontal="true"
+                android:scaleType="fitXY"
+                />
+
+            <TextView
+                android:id="@+id/reco_title2"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="1dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/reco_poster2"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

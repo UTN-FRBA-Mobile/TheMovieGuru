@@ -1,8 +1,12 @@
 package com.utn.mobile.myapplication.service;
 
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.google.gson.stream.JsonToken;
 import com.utn.mobile.myapplication.MainActivity;
+import com.utn.mobile.myapplication.MovieGuruApplication;
 import com.utn.mobile.myapplication.R;
 import com.utn.mobile.myapplication.domain.Genero;
 import com.utn.mobile.myapplication.domain.Pelicula;
@@ -45,9 +49,50 @@ public class PeliculaService extends AbstractService {
         return movies;
     }
 
+    public List<Pelicula> getRecos(boolean authentication) {
+
+        final int user_id =  PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getInt("user-id", -1);
+
+        int page = 1;
+
+        String base_url;
+        String url;
+
+        if(user_id > 0)
+        {
+            base_url = String.format(context.getString(R.string.url_usuario), context.getString(R.string.base_url));
+            String ID = String.valueOf(user_id);
+            url = base_url+ ID + "/recomendaciones";
+        }
+        else
+        {
+            base_url = context.getString(R.string.base_api_reco);
+            String api_key = "68325225ac8387f83699c5dddc932a8a";
+            url = base_url + api_key + "&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page="+page+"&vote_average.gte=7";
+        }
+        //puede que este if tenga que ir adentro del while, VER BIEN
+
+        String key = context.getString(R.string.cache_key_reco)+user_id;
+        List<Pelicula> movies = new ArrayList<>();
+        boolean remainingMovies = true;
+
+        while(remainingMovies) {
+            List<Pelicula> pagedMovies = (List<Pelicula>) get(url , key + page, authentication);
+            remainingMovies = false;
+            movies.addAll(pagedMovies);
+            page++;
+        }
+
+        return movies;
+    }
+
     public List<Pelicula> getAll(String search) {
         return getAll(false, search);
     }
+    public List<Pelicula> getRecos() {
+        return getRecos(false);
+    }
+
 
     @Override
     protected List<Pelicula> deserialize(String json) {
@@ -57,13 +102,17 @@ public class PeliculaService extends AbstractService {
 
             for (int i = 0; i < actorJsonArray.length(); i++) {
                 JSONObject jsonObject = actorJsonArray.getJSONObject(i);
-                Pelicula peli = new Pelicula(jsonObject.getString("title"), jsonObject.getInt("id"));
+                Pelicula peli = new Pelicula(jsonObject.getString("original_title"), jsonObject.getInt("id"));
                 peli.setImg_poster(jsonObject.getString("poster_path"));
-                peli.setYear(jsonObject.getString("release_date"));
-
-                JSONArray genreJsonArray = jsonObject.getJSONArray("genre_ids");
-                peli.setGeneros(getMatchingGenres(genreJsonArray));
-
+                if(jsonObject.has("release_date"))
+                {
+                    peli.setYear(jsonObject.getString("release_date"));
+                }
+                if(jsonObject.has("genre_ids"))
+                {
+                    JSONArray genreJsonArray = jsonObject.getJSONArray("genre_ids");
+                    peli.setGeneros(getMatchingGenres(genreJsonArray));
+                }
                 movies.add(peli);
             }
             return movies;
