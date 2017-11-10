@@ -22,6 +22,7 @@
     <string name="cache_key_actor">actor_cache_key</string>
     <string name="cache_key_image">image_cache_key</string>
     <string name="cache_key_pelicula">pelicula_cache_key</string>
+    <string name="cache_key_reco">reco_cache_key</string>
     <string name="reconocedor_help">Haga click aquí para abrir la cámara</string>
     <string name="escanear_text">Escanear</string>
 
