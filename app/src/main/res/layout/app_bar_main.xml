@@ -56,7 +56,7 @@
                 android:textColor="@color/toolbarFont"
                 android:textSize="22dp" />
 
-            <!--
+
             <ImageView
                 android:id="@+id/changeModeButton"
                 android:layout_width="0dp"
@@ -65,7 +65,8 @@
                 android:onClick="changeMode"
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp"
-                android:src="@drawable/ic_list" />-->
+                android:visibility="gone"
+                android:src="@drawable/ic_list" />
 
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
