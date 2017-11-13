@@ -1,21 +1,28 @@
 package com.utn.mobile.myapplication;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.utn.mobile.myapplication.domain.Actor;
@@ -136,6 +143,57 @@ public class PeliculaFragment extends Fragment {
 
         ScrollView scrollViewPeli = (ScrollView) activity.findViewById(R.id.scrollMovie);
         scrollViewPeli.setVisibility(View.VISIBLE);
+
+        Button btnLista = (Button) activity.findViewById(R.id.lista_button);
+        btnLista.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                DialogoSeleccion dialogo = new DialogoSeleccion();
+                dialogo.show(fragmentManager, "tagSeleccion");            }
+        });
+
+    }
+
+    public static class DialogoSeleccion extends DialogFragment {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            final String[] items = {"Español", "Inglés", "Francés"};
+
+            AlertDialog.Builder builder =
+                    new AlertDialog.Builder(getActivity());
+
+            builder.setTitle("Agregar a Lista...")
+                    .setMultiChoiceItems(items, null,
+                            new DialogInterface.OnMultiChoiceClickListener() {
+                                public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+                                    //Log.i("Dialogos", "Opción elegida: " + items[item]);
+                                    Toast.makeText(getContext(),"Opción elegida: " + items[item],Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+            builder.setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            //ListView list = ((android.app.AlertDialog) dialog).getListView();
+                            //ListView has boolean array like {1=true, 3=true}, that shows checked items
+                        }
+                    });
+
+            builder.setNegativeButton("Cancel",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //((TextView) myFilesActivity.findViewById(R.id.text)).setText("Click here to open Dialog");
+                        }
+                    });
+
+            return builder.create();
+        }
     }
 
     private class ActorViewHolder extends RecyclerView.ViewHolder {
