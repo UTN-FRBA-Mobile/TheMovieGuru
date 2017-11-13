@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PeliculaService extends AbstractService {
@@ -72,7 +73,7 @@ public class PeliculaService extends AbstractService {
         }
         //puede que este if tenga que ir adentro del while, VER BIEN
 
-        String key = context.getString(R.string.cache_key_reco)+user_id;
+        String key = context.getString(R.string.cache_key_reco)+user_id+new Date();
         List<Pelicula> movies = new ArrayList<>();
         boolean remainingMovies = true;
 
