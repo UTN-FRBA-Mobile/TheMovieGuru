@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -127,8 +128,18 @@ public class LoginFragment extends Fragment {
                 String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
                 activity.changeDrawer(true);
                 activity.findFavsForUser(usuario.getUserId(),true);
-                Toast.makeText(activity.getApplicationContext(), "Te logueaste, si estuviera terminado te llevariamos al fragment de recomendaciones", Toast.LENGTH_LONG).show();
+                setFragment(new RecomendacionesFragment(), false, null);
             }
+        }
+
+        public void setFragment(Fragment fragment, boolean toBackStack, String name ) {
+            MainActivity mainActivity = (MainActivity) getActivity();
+            FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_container, fragment);
+            if(toBackStack) {
+                ft.addToBackStack(name);
+            }
+            ft.commitAllowingStateLoss();
         }
 
     }

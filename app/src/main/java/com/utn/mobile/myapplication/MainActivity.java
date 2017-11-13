@@ -107,6 +107,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setFragment(new RecomendacionesFragment(), false, null);
     }
 
     public void findFavsForUser(int user_id, boolean modified)
@@ -215,12 +217,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setFragment(Fragment fragment){
-        setFragment(fragment, false, null);
+        setFragment(fragment, true, null);
     }
 
     public void showLoading(){
         nDialog = new ProgressDialog(this);
-        nDialog.setMessage("Cargando..");
+        nDialog.setMessage("Cargando...");
         nDialog.setIndeterminate(false);
         nDialog.setCancelable(true);
         nDialog.show();
@@ -286,7 +288,7 @@ public class MainActivity extends AppCompatActivity
         PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).edit().remove("user-id").apply();
         changeDrawer(false);
         mActoresFav = new ArrayList<Actor>();
-        setFragment(new BuscadorFragment());
+        setFragment(new RecomendacionesFragment(), false, null);
     }
 
     @Override
