@@ -1,16 +1,23 @@
 package com.utn.mobile.myapplication;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 
 public class ListasUsuarioFragment extends Fragment {
 
     MainActivity activity;
     private View mRootView;
+    private String listName;
 
     public ListasUsuarioFragment() {
     }
@@ -51,6 +58,35 @@ public class ListasUsuarioFragment extends Fragment {
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_listas_usuario, container, false);
         activity = (MainActivity) getActivity();
+        FloatingActionButton btnAddList = (FloatingActionButton) mRootView.findViewById(R.id.newListButton);
+        btnAddList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle("Nueva lista");
+                
+                final EditText input = new EditText(activity);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listName = input.getText().toString();
+                        Toast.makeText(activity, listName, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
+            }
+        });
+
         return mRootView;
     }
 
