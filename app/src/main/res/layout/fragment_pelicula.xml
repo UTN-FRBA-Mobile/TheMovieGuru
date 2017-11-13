@@ -105,7 +105,8 @@
                    android:layout_height="wrap_content"
                    android:text="@string/agregar_a_lista_text"
                    android:layout_centerHorizontal="true"
-                   android:layout_centerVertical="true" />
+                   android:layout_centerVertical="true"
+                   android:visibility="invisible"/>
 
             </RelativeLayout>
 

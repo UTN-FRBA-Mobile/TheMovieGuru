@@ -7,6 +7,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -144,14 +145,20 @@ public class PeliculaFragment extends Fragment {
         ScrollView scrollViewPeli = (ScrollView) activity.findViewById(R.id.scrollMovie);
         scrollViewPeli.setVisibility(View.VISIBLE);
 
-        Button btnLista = (Button) activity.findViewById(R.id.lista_button);
-        btnLista.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                DialogoSeleccion dialogo = new DialogoSeleccion();
-                dialogo.show(fragmentManager, "tagSeleccion");            }
-        });
+        final int user_id =  PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getInt("user-id", -1);
+
+        if(user_id>=0) {
+            Button btnLista = (Button) activity.findViewById(R.id.lista_button);
+            btnLista.setVisibility(View.VISIBLE);
+            btnLista.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    DialogoSeleccion dialogo = new DialogoSeleccion();
+                    dialogo.show(fragmentManager, "tagSeleccion");
+                }
+            });
+        }
 
     }
 
