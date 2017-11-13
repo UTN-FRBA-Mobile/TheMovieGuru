@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import org.springframework.http.converter.StringHttpMessageConverter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ListService extends AbstractService {
@@ -48,7 +49,7 @@ public class ListService extends AbstractService {
 
     public List<Lista> getAll() {
         String base_url = String.format(context.getString(R.string.url_listas), context.getString(R.string.base_url));
-        String key = "listas_user"; //Cambiar para que no devuelva siempre lo mismo
+        String key = "listas_user" + new Date(); //Cambiar para que no devuelva siempre lo mismo
         List<Lista> lists = new ArrayList<>();
         int page = 1;
         boolean remainingListas = true;

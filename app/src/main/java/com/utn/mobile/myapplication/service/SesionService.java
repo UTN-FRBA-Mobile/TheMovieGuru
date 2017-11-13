@@ -42,6 +42,7 @@ public class SesionService extends AbstractService {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPreferences.edit().putString("user-token", u.getToken()).apply();
             sharedPreferences.edit().putInt("user-id", u.getUserId()).apply();
+            sharedPreferences.edit().putString("username", u.getUsername()).apply();
 
             return u;
         } catch (Exception e){

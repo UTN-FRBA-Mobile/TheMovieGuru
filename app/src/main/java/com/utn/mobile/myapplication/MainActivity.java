@@ -29,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -73,17 +74,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
         nv = (NavigationView) findViewById(R.id.nav_view);
         if (token == null) {
@@ -178,10 +168,15 @@ public class MainActivity extends AppCompatActivity
     public void changeDrawer(boolean logged){
         nv = (NavigationView) findViewById(R.id.nav_view);
         nv.getMenu().clear();
+        TextView nombreTV =(TextView) findViewById(R.id.nombreUser);
         if(logged){
+            String nombre = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("username", null);
+
+            nombreTV.setText("Hola " + nombre + "!");
             nv.inflateMenu(R.menu.activity_main_drawer);
         }
         else{
+            nombreTV.setText("Inicia sesión");
             nv.inflateMenu(R.menu.activity_main_drawer_unlogged);
         }
     }
@@ -288,6 +283,7 @@ public class MainActivity extends AppCompatActivity
     private void closeSession(){
         PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).edit().remove("user-token").apply();
         PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).edit().remove("user-id").apply();
+        PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).edit().remove("username").apply();
         changeDrawer(false);
         mActoresFav = new ArrayList<Actor>();
         setFragment(new RecomendacionesFragment(), false, null);
@@ -301,9 +297,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_recomendations) {
             selectedFragment = new RecomendacionesFragment();
-        } else if (id == R.id.nav_searcher) {
-            selectedFragment = new BuscadorFragment();
-        } else if (id == R.id.nav_user_lists) {
+        }  else if (id == R.id.nav_user_lists) {
             selectedFragment = new ListasUsuarioFragment();
         } else if (id == R.id.nav_user_fav_actors) {
             selectedFragment = new ActoresFavoritosFragment();
@@ -450,6 +444,7 @@ public class MainActivity extends AppCompatActivity
     public void setMovies(List<Pelicula> movies) { this.mMovies = movies; }
     public void setmActoresFav(List<Actor> favs) { this.mActoresFav = favs; }
     public void addActorAMFavs(Actor actor) { this.mActoresFav.add(actor); }
+    public void addLista(Lista lista) { this.mListas.add(lista); }
     public void removeActorDeMFavs(Actor actor) { this.mActoresFav.remove(actor); }
     public void setGenres(List<Genero> genres) { this.mGeneros = genres; }
     public void setQuery(String query) { this.mQuery = query; }

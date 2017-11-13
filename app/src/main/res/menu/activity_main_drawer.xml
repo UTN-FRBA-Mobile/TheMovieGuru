@@ -7,10 +7,6 @@
             android:icon="@drawable/icono_recomendados"
             android:title="@string/recomendations" />
         <item
-            android:id="@+id/nav_searcher"
-            android:icon="@android:drawable/ic_menu_search"
-            android:title="@string/searcher" />
-        <item
             android:id="@+id/nav_user_lists"
             android:icon="@drawable/ic_menu_send"
             android:title="@string/user_lists" />

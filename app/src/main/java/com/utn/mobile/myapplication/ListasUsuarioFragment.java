@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.utn.mobile.myapplication.domain.Actor;
 import com.utn.mobile.myapplication.domain.Lista;
@@ -40,6 +41,7 @@ public class ListasUsuarioFragment extends Fragment {
     MainActivity activity;
     private View mRootView;
     private String listName;
+    private LRVAdapter adapterListas;
 
     public ListasUsuarioFragment() {
     }
@@ -126,9 +128,8 @@ public class ListasUsuarioFragment extends Fragment {
             this.listas = new ArrayList(listas);
         }
 
-        public void update(List<Lista> listas) {
-            this.listas.clear();
-            this.listas.addAll(listas);
+        public void update(Lista lista) {
+            this.listas.add(lista);
             notifyDataSetChanged();
         }
 
@@ -153,9 +154,10 @@ public class ListasUsuarioFragment extends Fragment {
             lvh.itemContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PeliculaFragment peliculaFragment = PeliculaFragment.newInstance(item.getId());
+                    Gson gson = new Gson();
+                    ListaFragment listaFragment = ListaFragment.newInstance( gson.toJson(item.getPeliculas()));
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment_container, peliculaFragment);
+                    transaction.replace(R.id.fragment_container, listaFragment);
                     transaction.addToBackStack("pelicula_fragment_lista");
                     transaction.commit();
                 }
@@ -198,7 +200,7 @@ public class ListasUsuarioFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerViewListas.setLayoutManager(layoutManager);
 
-        LRVAdapter adapterListas = new LRVAdapter(listas);
+        adapterListas = new LRVAdapter(listas);
         recyclerViewListas.setAdapter(adapterListas);
 
 
@@ -262,7 +264,6 @@ public class ListasUsuarioFragment extends Fragment {
             pelicula = peli;
         }
 
-
         @Override
         protected Integer doInBackground(Object... params) {
             try {
@@ -270,7 +271,6 @@ public class ListasUsuarioFragment extends Fragment {
                 if(response!=null)
                 {
                     MainActivity activity = (MainActivity) getActivity();
-                    //activity.findFavsForUser(user_id, true);
                     return TASK_RESULT_OK;
                 }
                 else
@@ -287,6 +287,9 @@ public class ListasUsuarioFragment extends Fragment {
         protected void onPostExecute(Integer result) {
             if (result == TASK_RESULT_OK) {
                 MainActivity activity = (MainActivity) getActivity();
+                Lista lista = new Lista(pelicula.getNombre());
+                activity.addLista(lista);
+                adapterListas.update(lista);
                 if (activity == null) return;
             }
             else
