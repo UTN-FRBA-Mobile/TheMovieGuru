@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity
     private int PROFILE_PIC_COUNT;
     private static final int SELECT_FILE = 2;
     private static final int REQUEST_CAMERA = 1;
+    private Menu mOptionsMenu;
+    boolean hideMenu;
     ProgressDialog nDialog;
     NavigationView nv;
 
@@ -114,6 +116,54 @@ public class MainActivity extends AppCompatActivity
         new FindFavs(user_id, modified).execute();
     }
 
+    public ImageView setToolbarButton(int id){
+        ImageView toolbarButton = (ImageView) findViewById(R.id.changeModeButton);
+        toolbarButton.setImageResource(id);
+        return toolbarButton;
+    }
+
+    public void showToolbarButton(){
+        updateOptionsMenu(true);
+        ImageView toolbarButton = (ImageView) findViewById(R.id.changeModeButton);
+        toolbarButton.setVisibility(View.VISIBLE);
+    }
+
+    public void hideToolbarButton(){
+        updateOptionsMenu(true);
+    }
+
+    private void updateOptionsMenu(boolean hide) {
+        hideMenu = hide;
+        if (mOptionsMenu != null) {
+            onPrepareOptionsMenu(mOptionsMenu);
+        }
+        else{
+            MenuItem searchItem = mOptionsMenu.findItem(R.id.search);
+            searchItem.setVisible(!hide);
+        }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(hideMenu == true) {
+            MenuItem searchItem = menu.findItem(R.id.search);
+            searchItem.setVisible(false);
+        }
+        else{
+            MenuItem searchItem = menu.findItem(R.id.search);
+            searchItem.setVisible(true);
+        }
+        hideMenu = false;
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public void setToolbarButtonDefault(){
+        ImageView toolbarButton = (ImageView) findViewById(R.id.changeModeButton);
+        toolbarButton.setVisibility(View.GONE);
+        updateOptionsMenu(false);
+
+    }
+
     @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -139,6 +189,7 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
 
         getMenuInflater().inflate(R.menu.options_menu, menu);
+        mOptionsMenu = menu;
 
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);

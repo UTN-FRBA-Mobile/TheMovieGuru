@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 
 public class ListasUsuarioFragment extends Fragment {
 
+    MainActivity activity;
+    private View mRootView;
+
     public ListasUsuarioFragment() {
     }
 
@@ -30,9 +33,25 @@ public class ListasUsuarioFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        activity.hideToolbarButton();
+        activity.setToolbarTitle(R.string.event_list_title);
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroyView() {
+        activity.setToolbarButtonDefault();
+        activity.setToolbarTitle(R.string.app_name);
+        super.onDestroyView();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_listas_usuario, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_listas_usuario, container, false);
+        activity = (MainActivity) getActivity();
+        return mRootView;
     }
 
 }
