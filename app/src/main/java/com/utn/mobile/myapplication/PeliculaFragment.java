@@ -124,7 +124,7 @@ public class PeliculaFragment extends Fragment {
         final ImageView imagenIV = (ImageView) activity.findViewById(R.id.movie_image);
         if(peli.getImg_poster().equals("null"))
         {
-            Picasso.with(this.getContext()).load(R.drawable.batman).into(imagenIV);
+            Picasso.with(this.getContext()).load(R.drawable.batman_300).into(imagenIV);
         }
         else
         {

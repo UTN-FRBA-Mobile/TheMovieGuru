@@ -150,14 +150,7 @@ public class ActorFragment extends Fragment {
                     if ( lines > 0)
                         if ( l.getEllipsisCount(lines-1) > 0)
                             botonMas.setVisibility(View.VISIBLE);
-                    if (Build.VERSION.SDK_INT < 16)
-                    {
-                        bioTV.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    }
-                    else
-                    {
-                        bioTV.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    }
+                    bioTV.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 }
             }
         });
