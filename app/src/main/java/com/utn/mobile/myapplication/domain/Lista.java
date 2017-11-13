@@ -3,14 +3,15 @@ package com.utn.mobile.myapplication.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Lista {
 
-    private String id;
+    private int id;
 
     private String nombre;
 
-    private Collection<Pelicula> peliculas = new ArrayList<Pelicula>();
+    private List<Pelicula> peliculas = new ArrayList<>();
 
 
     public Lista(String nombre)
@@ -33,7 +34,7 @@ public class Lista {
 
 	/* SETTERS & GETTERS*/
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -41,9 +42,14 @@ public class Lista {
         return nombre;
     }
 
-    public Collection<Pelicula> getPeliculas()
+    public List<Pelicula> getPeliculas()
     {
         return peliculas;
     }
+
+    public void setPeliculas(List<Pelicula> peliculas){
+        this.peliculas = peliculas;
+    }
+
 
 }

@@ -135,9 +135,8 @@ public abstract class AbstractService {
                 if(authentication) {
                     HttpHeaders headers = new HttpHeaders();
                     Context context = MovieGuruApplication.getAppContext();
-                    // obtener token de logueo
-                    //String token = PreferenceManager.getDefaultSharedPreferences(context).getString(SignInPreferences.AUTH_SERVER_TOKEN, "");
-                    // headers.set("Authorization", "Token token=" + token);
+                    String token = PreferenceManager.getDefaultSharedPreferences(context).getString("user-token", "");
+                    headers.set("Authorization", "Bearer " + token);
 
                     HttpEntity entity = new HttpEntity(headers);
                     ResponseEntity responseEntity = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);

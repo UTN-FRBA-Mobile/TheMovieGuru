@@ -5,20 +5,31 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.utn.mobile.myapplication.domain.Actor;
 import com.utn.mobile.myapplication.domain.Lista;
 import com.utn.mobile.myapplication.domain.Pelicula;
+import com.utn.mobile.myapplication.service.ActorService;
 import com.utn.mobile.myapplication.service.ListService;
+import com.utn.mobile.myapplication.service.PeliculaService;
 import com.utn.mobile.myapplication.service.SingleActorService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_ERROR;
 import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_OK;
@@ -69,6 +80,7 @@ public class ListasUsuarioFragment extends Fragment {
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_listas_usuario, container, false);
         activity = (MainActivity) getActivity();
+        new PopulateListTask().execute();
         FloatingActionButton btnAddList = (FloatingActionButton) mRootView.findViewById(R.id.newListButton);
         btnAddList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +115,143 @@ public class ListasUsuarioFragment extends Fragment {
         });
 
         return mRootView;
+    }
+
+    private class LRVAdapter extends RecyclerView.Adapter<ListViewHolder>{
+
+        List<Lista> listas;
+
+        public LRVAdapter(List<Lista> listas) {
+            //Nuevas instancias para evitar modificar listas originales referenciadas
+            this.listas = new ArrayList(listas);
+        }
+
+        public void update(List<Lista> listas) {
+            this.listas.clear();
+            this.listas.addAll(listas);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemCount() {
+            return listas.size();
+        }
+
+        @Override
+        public ListViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_item_layout, viewGroup, false);
+            ListViewHolder lvh = new ListViewHolder(v);
+            return lvh;
+        }
+
+        @Override
+        public void onBindViewHolder(ListViewHolder lvh, int i) {
+            final Lista item = listas.get(i);
+
+            lvh.itemName.setText(item.getNombre());
+
+            lvh.itemContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PeliculaFragment peliculaFragment = PeliculaFragment.newInstance(item.getId());
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, peliculaFragment);
+                    transaction.addToBackStack("pelicula_fragment_lista");
+                    transaction.commit();
+                }
+            });
+
+            lvh.itemContent.setText(getPeliculasFormat(item.getPeliculas()));
+
+
+        }
+
+        public String getPeliculasFormat (List<Pelicula> pelis)
+        {
+            String ret = "";
+            //List<Pelicula> pelis = lista.getPeliculas();
+
+
+
+            if(pelis.size() != 0) {
+                ret = ret + pelis.get(0).getNombre();
+
+                for (int i = 1; i < pelis.size(); i++) {
+                    ret = ret + ", " + pelis.get(i).getNombre();
+                }
+            }
+            else{
+                ret = "No posee películas";
+            }
+
+            return ret;
+        }
+
+        @Override
+        public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+            super.onAttachedToRecyclerView(recyclerView);
+        }
+    }
+
+    private void createRecyclerView(List<Lista> listas) {
+        RecyclerView recyclerViewListas = (RecyclerView) mRootView.findViewById(R.id.userListRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerViewListas.setLayoutManager(layoutManager);
+
+        LRVAdapter adapterListas = new LRVAdapter(listas);
+        recyclerViewListas.setAdapter(adapterListas);
+
+
+    }
+
+    private class ListViewHolder extends RecyclerView.ViewHolder {
+
+        CardView itemContainer;
+        TextView itemName;
+        TextView itemContent;
+
+        public ListViewHolder(View itemView) {
+            super(itemView);
+
+            itemContainer = (CardView) itemView.findViewById(R.id.itemContainer);
+            itemName = (TextView) itemView.findViewById(R.id.listItemName);
+            itemContent = (TextView) itemView.findViewById(R.id.listItemContent);
+        }
+
+    }
+
+    private class PopulateListTask extends AsyncTask<Object, Object, Integer> {
+        List<Lista> listas;
+
+        @Override
+        protected void onPreExecute() {
+            MainActivity activity = (MainActivity) getActivity();
+            activity.showLoading();
+        }
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+                MainActivity activity = (MainActivity) getActivity();
+                listas = ListService.get().getAll();
+                return TASK_RESULT_OK;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (result == TASK_RESULT_OK) {
+                MainActivity activity = (MainActivity) getActivity();
+                if (activity == null) return;
+                activity.hideLoading();
+                activity.setListas(listas);
+                createRecyclerView(listas);
+            }
+        }
+
     }
 
     private class AddList extends AsyncTask<Object, Object, Integer> {

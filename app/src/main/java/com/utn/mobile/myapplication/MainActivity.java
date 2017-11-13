@@ -35,6 +35,7 @@ import com.squareup.picasso.Picasso;
 import com.utn.mobile.myapplication.component.AsapTextView;
 import com.utn.mobile.myapplication.domain.Actor;
 import com.utn.mobile.myapplication.domain.Genero;
+import com.utn.mobile.myapplication.domain.Lista;
 import com.utn.mobile.myapplication.domain.Pelicula;
 import com.utn.mobile.myapplication.service.ActorFavService;
 import com.utn.mobile.myapplication.service.GenreService;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout mDrawerLayout;
     private List<Actor> mActors = new ArrayList<>();
     private List<Pelicula> mMovies = new ArrayList<>();
+    private List<Lista> mListas = new ArrayList<>();
     private List<Actor> mActoresFav = new ArrayList<>();
     private String mQuery;
     private static List<Genero> mGeneros = new ArrayList<>();
@@ -444,6 +446,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setActors(List<Actor> actors) { this.mActors = actors; }
+    public void setListas(List<Lista> listas) { this.mListas = listas; }
     public void setMovies(List<Pelicula> movies) { this.mMovies = movies; }
     public void setmActoresFav(List<Actor> favs) { this.mActoresFav = favs; }
     public void addActorAMFavs(Actor actor) { this.mActoresFav.add(actor); }

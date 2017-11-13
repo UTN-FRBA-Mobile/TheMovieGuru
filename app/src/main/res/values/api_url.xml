@@ -12,6 +12,6 @@
     <string name="url_pelicula">%1$s/peliculas/</string>
     <string name="url_login">%1$s/login/</string>
     <string name="url_usuario">%1$s/usuarios/</string>
-    <string name="url_listas">%1$s/listas/</string>
+    <string name="url_listas">%1$s/listas</string>
 
 </resources>
