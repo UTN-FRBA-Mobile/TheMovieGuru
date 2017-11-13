@@ -1,6 +1,7 @@
 package com.utn.mobile.myapplication;
 
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -10,7 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.utn.mobile.myapplication.domain.Actor;
+import com.utn.mobile.myapplication.domain.Lista;
+import com.utn.mobile.myapplication.domain.Pelicula;
+import com.utn.mobile.myapplication.service.ListService;
+import com.utn.mobile.myapplication.service.SingleActorService;
+
+import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_ERROR;
+import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_OK;
 
 
 public class ListasUsuarioFragment extends Fragment {
@@ -75,7 +86,9 @@ public class ListasUsuarioFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         listName = input.getText().toString();
-                        Toast.makeText(activity, listName, Toast.LENGTH_SHORT).show();
+                        Pelicula peli = new Pelicula();
+                        peli.setNombre(listName);
+                        new AddList(peli).execute();
                     }
                 });
                 builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
@@ -91,5 +104,52 @@ public class ListasUsuarioFragment extends Fragment {
 
         return mRootView;
     }
+
+    private class AddList extends AsyncTask<Object, Object, Integer> {
+        Pelicula pelicula;
+
+        public AddList(Pelicula peli)
+        {
+            pelicula = peli;
+        }
+
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+                String response = ListService.get().addOne(pelicula);
+                if(response!=null)
+                {
+                    MainActivity activity = (MainActivity) getActivity();
+                    //activity.findFavsForUser(user_id, true);
+                    return TASK_RESULT_OK;
+                }
+                else
+                {
+                    return TASK_RESULT_ERROR;
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (result == TASK_RESULT_OK) {
+                MainActivity activity = (MainActivity) getActivity();
+                if (activity == null) return;
+            }
+            else
+            {
+                MainActivity activity = (MainActivity) getActivity();
+                Toast.makeText(getContext(),"Ocurrió un problema al crear la lista", Toast.LENGTH_LONG).show();
+                //activity.removeActorDeMFavs(actor);
+            }
+        }
+
+    }
+
+
 
 }

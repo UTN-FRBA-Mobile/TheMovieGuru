@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="base_url">http://10.0.3.2:8080/api/v1</string>
+    <string name="base_url">http://10.0.2.2:8080/api/v1</string>
     <string name="base_api">https://api.themoviedb.org/3/search</string>
     <string name="base_api_reco">https://api.themoviedb.org/3/discover/movie?api_key=</string>
     <string name="api_actor">%1$s/person?api_key=</string>
@@ -12,5 +12,6 @@
     <string name="url_pelicula">%1$s/peliculas/</string>
     <string name="url_login">%1$s/login/</string>
     <string name="url_usuario">%1$s/usuarios/</string>
+    <string name="url_listas">%1$s/listas/</string>
 
 </resources>

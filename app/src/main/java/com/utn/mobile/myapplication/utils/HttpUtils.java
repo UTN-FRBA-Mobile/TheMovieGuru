@@ -101,11 +101,9 @@ public class HttpUtils {
             conn.setRequestProperty("Content-length", Integer.toString(postDataLength ));
             if(authentication){
                 Context context = MovieGuruApplication.getAppContext();
-                /*
-                Token de logueo
-                String token = PreferenceManager.getDefaultSharedPreferences(context).getString(SignInPreferences.AUTH_SERVER_TOKEN, "");
-                conn.setRequestProperty ("Authorization", "Token token=" + token);
-                */
+                String token = PreferenceManager.getDefaultSharedPreferences(context).getString("user-token", "");
+                conn.setRequestProperty ("Authorization", "Bearer " + token);
+
             }
             DataOutputStream wr = new DataOutputStream(conn.getOutputStream ());
             wr.write( postData );
@@ -136,6 +134,8 @@ public class HttpUtils {
 
             if (secure) {
                 Context context = MovieGuruApplication.getAppContext();
+                String token = PreferenceManager.getDefaultSharedPreferences(context).getString("user-token", "");
+                urlConnection.setRequestProperty ("Authorization", "Bearer " + token);
             }
 
             if (params != null) {
