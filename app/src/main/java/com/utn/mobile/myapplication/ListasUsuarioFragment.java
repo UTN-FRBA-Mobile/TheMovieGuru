@@ -64,10 +64,12 @@ public class ListasUsuarioFragment extends Fragment {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle("Nueva lista");
-                
-                final EditText input = new EditText(activity);
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
+
+                View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.new_list_dialog_layout, (ViewGroup) getView(), false);
+                // Set up the input
+                final EditText input = (EditText) viewInflated.findViewById(R.id.input_text);
+                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                builder.setView(viewInflated);
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
