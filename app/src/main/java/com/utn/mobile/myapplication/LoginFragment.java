@@ -23,6 +23,8 @@ import com.utn.mobile.myapplication.service.SesionService;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
+import static com.utn.mobile.myapplication.R.string.base_url;
+import static com.utn.mobile.myapplication.R.string.user_not_found;
 import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_ERROR;
 import static com.utn.mobile.myapplication.utils.GlobalConstants.TASK_RESULT_OK;
 
@@ -123,12 +125,21 @@ public class LoginFragment extends Fragment {
 
                 // setearViews(actor, activity);
                 // createRecyclerView(actor.getPeliculas());
+
                 activity.hideLoading();
-                usuarioLoggeado = usuario;
-                String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
-                activity.changeDrawer(true);
-                activity.findFavsForUser(usuario.getUserId(),true);
-                setFragment(new RecomendacionesFragment(), false, null);
+
+                if (usuario != null){
+                    usuarioLoggeado = usuario;
+                    String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
+                    activity.changeDrawer(true);
+                    activity.findFavsForUser(usuario.getUserId(),true);
+                    setFragment(new RecomendacionesFragment(), false, null);
+                } else {
+                    Toast.makeText(getContext(), user_not_found, Toast.LENGTH_SHORT).show();
+                }
+
+
+
             }
         }
 
