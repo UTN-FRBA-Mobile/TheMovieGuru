@@ -1,13 +1,11 @@
 package com.utn.mobile.myapplication;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.media.Image;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,14 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
-import com.utn.mobile.myapplication.domain.Actor;
 import com.utn.mobile.myapplication.domain.ActorEnPelicula;
-import com.utn.mobile.myapplication.domain.Imagen;
+import com.utn.mobile.myapplication.domain.Lista;
 import com.utn.mobile.myapplication.domain.Pelicula;
-import com.utn.mobile.myapplication.service.ActorService;
 import com.utn.mobile.myapplication.service.ImageService;
-import com.utn.mobile.myapplication.service.PeliculaService;
-import com.utn.mobile.myapplication.service.SingleActorService;
+import com.utn.mobile.myapplication.service.ListService;
 import com.utn.mobile.myapplication.service.SingleMovieService;
 
 import java.util.ArrayList;
@@ -49,6 +44,7 @@ public class PeliculaFragment extends Fragment {
 
     private int mId;
     private View mRootView;
+    private List<Lista> mListas = new ArrayList<>();
 
 
 
@@ -80,6 +76,7 @@ public class PeliculaFragment extends Fragment {
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_pelicula, container, false);
         new FindMovie().execute();
+        new CargarListasDelUsuario().execute();
         return mRootView;
     }
 
@@ -110,6 +107,7 @@ public class PeliculaFragment extends Fragment {
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
                 activity.hideLoading();
+                //activity.setPeliculaActual(peli);
                 setearViews(peli, activity);
                 createRecyclerView(peli.getCast());
 
@@ -154,7 +152,12 @@ public class PeliculaFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    MainActivity mainActivity = (MainActivity) getActivity();
                     DialogoSeleccion dialogo = new DialogoSeleccion();
+                    Bundle args = new Bundle();
+                    args.putString("mId",String.valueOf(peli.getId()));
+                    args.putString("nombre_pelicula", peli.getNombre());
+                    dialogo.setArguments(args);
                     dialogo.show(fragmentManager, "tagSeleccion");
                 }
             });
@@ -164,20 +167,45 @@ public class PeliculaFragment extends Fragment {
 
     public static class DialogoSeleccion extends DialogFragment {
 
+
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
+            MainActivity mainActivity = (MainActivity) getActivity();
+
+            Bundle args = getArguments();
+            final String mId = args.getString("mId");
+            final String nombrePelicula = args.getString("nombre_pelicula");
+            final List<Lista> listas = mainActivity.getmListas();
+/*
             final String[] items = {"Español", "Inglés", "Francés"};
+            final boolean[] valores     = {true, false, true};
+*/
+            final String[] nombres = new ListasAdapter(mainActivity,listas).getListNombreListas();
+            final boolean[] valores = new ListasAdapter(mainActivity,listas).getBoolsPerteneceALista(Integer.parseInt(mId));
+
+            //new ListasAdapter(mainActivity,mainActivity.getmListas());
+
 
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(getActivity());
 
             builder.setTitle("Agregar a Lista...")
-                    .setMultiChoiceItems(items, null,
+                    .setMultiChoiceItems(nombres, valores,
                             new DialogInterface.OnMultiChoiceClickListener() {
-                                public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+                                public void onClick(DialogInterface dialog, int position, boolean isChecked) {
                                     //Log.i("Dialogos", "Opción elegida: " + items[item]);
-                                    Toast.makeText(getContext(),"Opción elegida: " + items[item],Toast.LENGTH_LONG).show();
+                                    if (isChecked) {
+
+                                        new AgregarPeliculaALista(listas.get(position),Integer.parseInt(mId),nombrePelicula).execute();
+
+                                    } else {
+
+                                        //new QuitarPeliculaDeLaLista(listas.get(position),Integer.parseInt(mId)).execute();
+                                    }
+
+                                    Toast.makeText(getContext(),"Opción elegida: " + nombres[position],Toast.LENGTH_LONG).show();
                                 }
                             });
 
@@ -185,12 +213,14 @@ public class PeliculaFragment extends Fragment {
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
-                            //ListView list = ((android.app.AlertDialog) dialog).getListView();
+/*
+                            ListView list = ((android.support.v7.app.AlertDialog) dialog).getListView();
                             //ListView has boolean array like {1=true, 3=true}, that shows checked items
+                            //list.get
+                            Log.d("aca",list.toString());*/
                         }
                     });
-
+/*
             builder.setNegativeButton("Cancel",
                     new DialogInterface.OnClickListener() {
                         @Override
@@ -198,7 +228,7 @@ public class PeliculaFragment extends Fragment {
                             //((TextView) myFilesActivity.findViewById(R.id.text)).setText("Click here to open Dialog");
                         }
                     });
-
+*/
             return builder.create();
         }
     }
@@ -327,4 +357,87 @@ public class PeliculaFragment extends Fragment {
 
     }
 
+    private class CargarListasDelUsuario extends AsyncTask<Object, Object, Integer> {
+
+        List<Lista> listas;
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+
+                listas = ListService.get().getAll();
+                return TASK_RESULT_OK;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+            if (result == TASK_RESULT_OK) {
+                MainActivity activity = (MainActivity) getActivity();
+                if (activity == null) return;
+                activity.setListas(listas);
+
+            }
+        }
+
+    }
+
+    private static class AgregarPeliculaALista extends AsyncTask<Object, Object, Integer> {
+
+        Lista lista;
+        String respuesta;
+        int mId;
+        String nombrePelicula;
+
+        public AgregarPeliculaALista(Lista l, int mId, String nombrePelicula){
+            this.lista = l;
+            this.mId = mId;
+            this.nombrePelicula = nombrePelicula;
+        }
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+
+                respuesta = ListService.get().addOne(new Pelicula(nombrePelicula,mId) );
+                return TASK_RESULT_OK;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+
+
+    }
+
+    private static class QuitarPeliculaDeLaLista extends AsyncTask<Object, Object, Integer> {
+
+        Lista lista;
+        String respuesta;
+        int mId;
+        String nombrePelicula;
+
+        public QuitarPeliculaDeLaLista(Lista l, int mId, String nombrePelicula){
+            this.lista = l;
+            this.mId = mId;
+            this.nombrePelicula = nombrePelicula;
+        }
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+
+                respuesta = ListService.get().addOne(new Pelicula(null,mId));
+                return TASK_RESULT_OK;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+
+
+    }
 }

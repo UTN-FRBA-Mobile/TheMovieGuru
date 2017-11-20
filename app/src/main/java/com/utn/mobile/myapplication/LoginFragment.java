@@ -33,7 +33,7 @@ public class LoginFragment extends Fragment {
 
     String nombreDeUsuario;
     String contraseña;
-    Usuario usuarioLoggeado;
+
     Button iniciarSesion;
     MainActivity activity;
     public LoginFragment() {
@@ -129,10 +129,11 @@ public class LoginFragment extends Fragment {
                 activity.hideLoading();
 
                 if (usuario != null){
-                    usuarioLoggeado = usuario;
+
                     String token = PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).getString("user-token", null);
                     activity.changeDrawer(true);
                     activity.findFavsForUser(usuario.getUserId(),true);
+                    activity.findListasForUser(usuario.getUserId());
                     setFragment(new RecomendacionesFragment(), false, null);
                 } else {
                     Toast.makeText(getContext(), user_not_found, Toast.LENGTH_SHORT).show();

@@ -40,6 +40,7 @@ import com.utn.mobile.myapplication.domain.Lista;
 import com.utn.mobile.myapplication.domain.Pelicula;
 import com.utn.mobile.myapplication.service.ActorFavService;
 import com.utn.mobile.myapplication.service.GenreService;
+import com.utn.mobile.myapplication.service.ListService;
 import com.utn.mobile.myapplication.utils.SpinnerDialog;
 
 import java.io.File;
@@ -106,6 +107,10 @@ public class MainActivity extends AppCompatActivity
     public void findFavsForUser(int user_id, boolean modified)
     {
         new FindFavs(user_id, modified).execute();
+    }
+
+    public void findListasForUser(int userId) {
+        new FindListas(userId).execute();
     }
 
     public ImageView setToolbarButton(int id){
@@ -286,6 +291,7 @@ public class MainActivity extends AppCompatActivity
         PreferenceManager.getDefaultSharedPreferences(MovieGuruApplication.getAppContext()).edit().remove("username").apply();
         changeDrawer(false);
         mActoresFav = new ArrayList<Actor>();
+        mListas = new ArrayList<Lista>();
         setFragment(new RecomendacionesFragment(), false, null);
     }
 
@@ -386,6 +392,9 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
+
+
+
     private class FindGenres extends AsyncTask<Object, Object, Integer> {
 
         @Override
@@ -425,6 +434,28 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private class FindListas extends AsyncTask<Object, Object, Integer> {
+
+        int user_id;
+
+
+        public FindListas(int id)
+        {
+            user_id = id;
+        }
+
+        @Override
+        protected Integer doInBackground(Object... params) {
+            try {
+
+                mListas = ListService.get().getAll();
+                return TASK_RESULT_OK;
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return TASK_RESULT_ERROR;
+            }
+        }
+    }
 
     public static String getGenreById(int id)
     {
@@ -439,6 +470,8 @@ public class MainActivity extends AppCompatActivity
         return "";
     }
 
+
+
     public void setActors(List<Actor> actors) { this.mActors = actors; }
     public void setListas(List<Lista> listas) { this.mListas = listas; }
     public void setMovies(List<Pelicula> movies) { this.mMovies = movies; }
@@ -450,4 +483,7 @@ public class MainActivity extends AppCompatActivity
     public void setQuery(String query) { this.mQuery = query; }
     public String getQuery() { return mQuery; }
     public List<Actor> getmActoresFav() { return mActoresFav; }
+    public List<Lista> getmListas() { return this.mListas; }
+
+
 }
