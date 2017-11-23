@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity
     boolean hideMenu;
     ProgressDialog nDialog;
     NavigationView nv;
+    private Pelicula peliculaActual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -392,8 +393,13 @@ public class MainActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
+    public void setPeliculaActual(Pelicula peliculaActual) {
+        this.peliculaActual = peliculaActual;
+    }
 
-
+    public Pelicula getPeliculaActual() {
+        return peliculaActual;
+    }
 
     private class FindGenres extends AsyncTask<Object, Object, Integer> {
 

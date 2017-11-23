@@ -107,7 +107,7 @@ public class PeliculaFragment extends Fragment {
                 MainActivity activity = (MainActivity) getActivity();
                 if (activity == null) return;
                 activity.hideLoading();
-                //activity.setPeliculaActual(peli);
+                activity.setPeliculaActual(peli);
                 setearViews(peli, activity);
                 createRecyclerView(peli.getCast());
 
@@ -185,6 +185,11 @@ public class PeliculaFragment extends Fragment {
             final String[] nombres = new ListasAdapter(mainActivity,listas).getListNombreListas();
             final boolean[] valores = new ListasAdapter(mainActivity,listas).getBoolsPerteneceALista(Integer.parseInt(mId));
 
+
+            String url = String.format(getContext().getString(R.string.url_listas_quitar_pelicula),
+                    getContext().getString(R.string.base_url),
+                    getContext().getString(R.string.url_listas_quitar_pelicula));
+
             //new ListasAdapter(mainActivity,mainActivity.getmListas());
 
 
@@ -196,16 +201,24 @@ public class PeliculaFragment extends Fragment {
                             new DialogInterface.OnMultiChoiceClickListener() {
                                 public void onClick(DialogInterface dialog, int position, boolean isChecked) {
                                     //Log.i("Dialogos", "Opción elegida: " + items[item]);
+                                    MainActivity mainActivity = (MainActivity) getActivity();
+
                                     if (isChecked) {
 
-                                        new AgregarPeliculaALista(listas.get(position),Integer.parseInt(mId),nombrePelicula).execute();
+                                        new AgregarPeliculaALista(listas.get(position), mainActivity.getPeliculaActual()).execute();
+
+                                        mainActivity.getmListas().get(position).addPelicula(mainActivity.getPeliculaActual());
+                                        Toast.makeText(getContext(),"Agregado: " + nombrePelicula + " a "+ listas.get(position).getNombre(),Toast.LENGTH_LONG).show();
 
                                     } else {
 
-                                        //new QuitarPeliculaDeLaLista(listas.get(position),Integer.parseInt(mId)).execute();
+                                        new QuitarPeliculaDeLaLista(listas.get(position), mainActivity.getPeliculaActual()).execute();
+
+                                        mainActivity.getmListas().get(position).removePelicula(mainActivity.getPeliculaActual());
+                                        Toast.makeText(getContext(),"Quitado: " + nombrePelicula + " de "+ listas.get(position).getNombre(),Toast.LENGTH_LONG).show();
                                     }
 
-                                    Toast.makeText(getContext(),"Opción elegida: " + nombres[position],Toast.LENGTH_LONG).show();
+
                                 }
                             });
 
@@ -389,20 +402,20 @@ public class PeliculaFragment extends Fragment {
 
         Lista lista;
         String respuesta;
-        int mId;
-        String nombrePelicula;
+        Pelicula pelicula;
 
-        public AgregarPeliculaALista(Lista l, int mId, String nombrePelicula){
-            this.lista = l;
-            this.mId = mId;
-            this.nombrePelicula = nombrePelicula;
+        public AgregarPeliculaALista(Lista lista, Pelicula pelicula){
+
+            this.lista = lista;
+            this.pelicula = pelicula;
+
         }
 
         @Override
         protected Integer doInBackground(Object... params) {
             try {
 
-                respuesta = ListService.get().addOne(new Pelicula(nombrePelicula,mId) );
+                //respuesta = ListService.get().addMovie(lista,pelicula);
                 return TASK_RESULT_OK;
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -417,20 +430,20 @@ public class PeliculaFragment extends Fragment {
 
         Lista lista;
         String respuesta;
-        int mId;
-        String nombrePelicula;
+        Pelicula pelicula;
 
-        public QuitarPeliculaDeLaLista(Lista l, int mId, String nombrePelicula){
-            this.lista = l;
-            this.mId = mId;
-            this.nombrePelicula = nombrePelicula;
+        public QuitarPeliculaDeLaLista(Lista lista, Pelicula pelicula){
+
+            this.lista = lista;
+            this.pelicula = pelicula;
+
         }
 
         @Override
         protected Integer doInBackground(Object... params) {
             try {
 
-                respuesta = ListService.get().addOne(new Pelicula(null,mId));
+                // respuesta = ListService.get().addOne(new Pelicula(null,mId));
                 return TASK_RESULT_OK;
             } catch (Exception ex) {
                 ex.printStackTrace();
